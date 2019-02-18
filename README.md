@@ -1,42 +1,21 @@
 # Behavioral Cloning Project
 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+### Overview
 
-Overview
----
-This repository contains starting files for the Behavioral Cloning Project.
+In this project,  we use deep neural networks and convolutional neural networks to clone driving behavior. We train, validate and test a model using Keras for outputting a steering angle to an autonomous vehicle.  
 
-In this project, you will use what you've learned about deep neural networks and convolutional neural networks to clone driving behavior. You will train, validate and test a model using Keras. The model will output a steering angle to an autonomous vehicle.
+We use image data and steering angles which are collected in the Udacity's [simulator](https://github.com/udacity/self-driving-car-sim) to train a neural network and then use this model to drive the car autonomously around the track in simulator.
 
-We have provided a simulator where you can steer a car around a track for data collection. You'll use image data and steering angles to train a neural network and then use this model to drive the car autonomously around the track.
-
-We also want you to create a detailed writeup of the project. Check out the [writeup template](https://github.com/udacity/CarND-Behavioral-Cloning-P3/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup. The writeup can be either a markdown file or a pdf document.
-
-To meet specifications, the project will require submitting five files: 
+The main files in this project are: 
 * model.py (script used to create and train the model)
 * drive.py (script to drive the car - feel free to modify this file)
 * model.h5 (a trained Keras model)
-* a report writeup file (either markdown or pdf)
 * video.mp4 (a video recording of your vehicle driving autonomously around the track for at least one full lap)
 
-This README file describes how to output the video in the "Details About Files In This Directory" section.
-
-The Project
----
-The goals / steps of this project are the following:
-* Use the simulator to collect data of good driving behavior 
-* Design, train and validate a model that predicts a steering angle from image data
-* Use the model to drive the vehicle autonomously around the first track in the simulator. The vehicle should remain on the road for an entire loop around the track.
-* Summarize the results with a written report
-
 ### Dependencies
-This lab requires:
+This lab requires [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit) The lab enviroment can be created with CarND Term1 Starter Kit. Click [here](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) for the details.
 
-* [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit)
-
-The lab enviroment can be created with CarND Term1 Starter Kit. Click [here](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) for the details.
-
-**or you can setup dependent environment by yourself**
+**You can setup dependent environment by yourself**
 
 - A  virtual environment install with tensorflow and keras is required
 - the tools for running drive.py
@@ -48,24 +27,16 @@ pip install Pillow
 pip install flask
 ```
 
-The following resources can be found in this github repository:
+- data.py
 
-* drive.py
-* video.py
-* writeup_template.md
-
-The simulator can be downloaded from the classroom. In the classroom, we have also provided sample data that you can optionally use to help train your model.
+  ```
+  pip install -U scikit-learn scipy matplotlib
+  ```
 
 
+### Run
 
-## Details About Files In This Directory
-
-### `drive.py`
-
-Usage of `drive.py` requires you have saved the trained model as an h5 file, i.e. `model.h5`. See the [Keras documentation](https://keras.io/getting-started/faq/#how-can-i-save-a-keras-model) for how to create this file using the following command:
-```sh
-model.save(filepath)
-```
+#### drive.py
 
 Once the model has been saved, it can be used with drive.py using this command:
 
@@ -103,7 +74,7 @@ ls run1
 
 The image file name is a timestamp of when the image was seen. This information is used by `video.py` to create a chronological video of the agent driving.
 
-### `video.py`
+#### video.py
 
 ```sh
 python video.py run1
@@ -119,45 +90,127 @@ python video.py run1 --fps 48
 
 Will run the video at 48 FPS. The default FPS is 60.
 
-#### Why create a video
+### Collecting Data
 
-1. It's been noted the simulator might perform differently based on the hardware. So if your model drives succesfully on your machine it might not on another machine (your reviewer). Saving a video is a solid backup in case this happens.
-2. You could slightly alter the code in `drive.py` and/or `video.py` to create a video of what your model sees after the image is processed (may be helpful for debugging).
+Data collection was done using the simulator in 'Training Mode.' 
 
-### Tips
-- Please keep in mind that training images are loaded in BGR colorspace using cv2 while drive.py load images in RGB to predict the steering angles.
+ After much trial and error I found that it was not necessary to gather images from a full lap around each track. For the first track I drove just past the bridge to the first dirt patch and for the mountain track I drove only half-way around.  
+
+Using the mouse for steering and being careful to drive steady down the center of the road provided me with good data. The couple of problem areas on each track were addressed by training the vehicle recovering from the sides of the road.  
+
+Successfully driving autonomously around the entire track while only training on a portion of it was an indication to me that the model generalized to all track conditions and did not overfit the training data.  
+
+In the end I gathered over 3500 images from each track for a total data set size of 7650 images.
 
 
 
+### Preprocessing Images
+
+Images were preprocessed before feeding to the neural network. 
+
+I tried different color spaces and found that the model generalized best using images in the BGR color space. 
+
+Training with the YUV color space gave erratic steering corrections resulting in too much side-to-side movement of the car.  
+
+In the RGB color space some areas of track 1 required many more training images to navigate correctly, particularly the areas with dirt patches on the side of the road.  
+
+Conversion to BGR solved both of these issues and required less training files overall.  
+
+After conversion to BGR, I crop the unnecessary portions of the image (background of sky, trees, mountains, hood of car) taking 50 pixels off the top of the image and 20 pixels off the bottom.  
+
+The cropped image is then resized to (128, 128) for input into the model.  I found that resizing the images **decreased training time** with no effect on accuracy.
 
 
 
+![preprocessing](/media/ubuntu16/%E6%96%B0%E5%8A%A0%E5%8D%B7/Self-Driving/github%E9%A1%B9%E7%9B%AE/CarND-Behavioral-Cloning-master/writeup_images/preprocessing.png)
 
-# **Behavioral Cloning** 
+### Data Augmentation
+
+I tried several methods of data augmentation.  
+
+Images could be augmented by flipping horizontally, 
+
+blurring, 
+
+changing the overall brightness, 
+
+or applying shadows to a portion of the image.  
+
+In the end, adding horizontally flipped images was the only augmentation that was necessary.  
+
+Randomly changing the images to augment the data set was not only was not necessary but when using the RGB color space I saw a loss of accuracy.  
+
+By adding a flipped image for every original image the data set size was effectively doubled. See the functions `random_blur()`, `random_brightness()`, and `random_shadow()` in the file `data.py` for augmentation code. 
+
+Visualization of data augmentation can be found in the Jupyter notebooks `Random_Brightness.ipynb` and `Random_Shadow.ipynb`.
+
+![Augmenting](/media/ubuntu16/%E6%96%B0%E5%8A%A0%E5%8D%B7/Self-Driving/github%E9%A1%B9%E7%9B%AE/CarND-Behavioral-Cloning-master/writeup_images/augmenting.png)
+
+### Data Set Distribution
+
+One improvement that was found to be particularly effective was to fix the poor distribution of the data.  A disproportionate number of steering angles in the data set are at or near zero.  
+
+To correct this steering angles are separated into 25 bins. 
+
+Bins with a count less than the mean are augmented while bins with counts greater than the mean are randomly pruned to bring their counts down. 
+
+This equalizes the distribution of steering angles across all bins.  
+
+Code can be found in the function `fix_distribution()` in `data.py.`  Plotting can be seen in the jupyter notebook `Fix_Distribution.ipynb`
+
+![Distribution](/media/ubuntu16/%E6%96%B0%E5%8A%A0%E5%8D%B7/Self-Driving/github%E9%A1%B9%E7%9B%AE/CarND-Behavioral-Cloning-master/writeup_images/distribution.png)
+
+### 
+
+### Model 
+
+The empirical process of finding the correct neural network can be a lesson in frustration.  I started with LeNet [1] and tried countless modifications.  Feeling the need for something slightly more powerful to increase nonlinearity and work for both tracks I moved on to a modified NVIDIA architecture[2].  Image data is preprocessed as described above before being normalized in the first layer.  The network consists of 5 Convolutional layers with max pooling and 5 fully connected layers.  Dropout layers were used in between the fully connected layers to reduce overfitting.  An Adam optimizer was used with a learning rate of 1e-4. Code for the model can be found in `model_definition.py`
+
+The final network is as follows:
+
+|         Layer          |  Output Shape  | Param # |
+| :--------------------: | :------------: | ------: |
+| Normalization (Lambda) | (128, 128, 3)  |       0 |
+| 1st Convolutional/ReLU | (124, 124, 24) |    1824 |
+|      Max Pooling       |  (62, 62, 24)  |       0 |
+| 2nd Convolutional/ReLU |  (58, 58, 36)  |   21636 |
+|      Max Pooling       |  (29, 29, 36)  |       0 |
+| 3rd Convolutional/ReLU |  (25, 25, 48)  |   43248 |
+|      Max Pooling       |  (12, 12, 48)  |       0 |
+| 4th Convolutional/ReLU |  (10, 10, 64)  |   27712 |
+| 5th Convolutional/ReLU |   (8, 8, 64)   |   36928 |
+|        Flatten         |     (4096)     |       0 |
+|        Dropout         |     (4096)     |       0 |
+|  1st Fully Connected   |     (1164)     | 4768908 |
+|        Dropout         |     (1164)     |       0 |
+|  2nd Fully Connected   |     (100)      |  116500 |
+|  3rd Fully Connected   |      (50)      |    5050 |
+|  4th Fully Connected   |      (10)      |     510 |
+|  5th Fully Connected   |      (1)       |      11 |
+
+### Training
 
 ------
 
-### The goals / steps of this project are the following:
+Training the network is done using the python script `model.py`.  By default the script runs for 10 epochs although the script will take a different number of epochs as a parameter.  The script by default allocates 80% of the data set to training and 20% to validation sets.
 
-1. Use the simulator to collect data of good driving behavior
-2. Build, a convolution neural network in Keras that predicts steering angles from images
-3. Train and validate the model with a training and validation set
-4. Test that the model successfully drives around track one without leaving the road
-5. Summarize the results with a written report
+```
+python model.py 20  # train for 20 epochs.
+```
 
-#### 1. Simple Netwok
+The script reads the image data from the CSV file, performs any augmentation and distribution balancing, and starts training on the data set.  Due to the possibility that the entire collection of image files might not fit into memory all at once the data set is separated into batches by a Keras generator.  The generator creates batches of `BATCH_SIZE` images, reading image data and augmenting the images on the fly. See the function `get_generator()`, line 383, of the file `data.py` for generator code.  Generators were used for both training and validation sets.
 
-​    First I tried one layer neural network (just map the input layer to one output) to test the whole pipeline can either work. The mse of the network can be reduced by training but the final test results is  not good.
+Validation accuracy was not a good indicator of the performance of the network.  It was better to watch for overfitting by comparing the training mean squared error (MSE) with the validation MSE.  A climbing validation MSE while the training MSE was still decreasing was a sign that the model was overfitting.  Dropout was used to combat this but I also limited the number of epochs to get the best performing model.
 
-next step:
+### Videos
 
-- using more complex network architecture
-- collecting more data
-- augmenting dataset
+`video1.mp4` is the recording of the vehicle going around the basic track.  `video2.mp4` is the recording of the vehicle going around the mountain track.
 
 
 
-### Model Architecture and Training Strategy
+
+
+
 
 #### 1. An appropriate model architecture has been employed
 
@@ -234,3 +287,6 @@ I finally randomly shuffled the data set and put Y% of the data into a validatio
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
+### Tips
+
+- Please keep in mind that training images are loaded in BGR colorspace using cv2 while drive.py load images in RGB to predict the steering angles.
