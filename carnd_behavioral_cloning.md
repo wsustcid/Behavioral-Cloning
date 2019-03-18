@@ -511,6 +511,68 @@ The input layer is divided into three sets of units: two "retinas" and a single 
 
 1. we would eventually like to integrate a map into the system to enable global point-to-point path planning.
 
+### 4.1.5 My Implementation
+
+I tried a fully connected neural network with one hidden layer (100 units). The loss is decreased while training. However, the output steering angles mostly are 0 during the testing stage even though after I fixed distribution of the data set.
+
+```bash
+Reading data from csv file...
+Reading is done.
+EPOCHS: 10
+Training Set Size: 3451
+Valization Set Size: 863
+Batch Size: 256
+/home/ubuntu16/Behavioral_Cloning/data.py:102: RuntimeWarning: divide by zero encountered in true_divide
+  copy_times = np.float32((desired_per_bin-hist)/hist)
+Training set size now: 3300
+Using TensorFlow backend.
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+cropping2d_1 (Cropping2D)    (None, 65, 320, 3)        0         
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 62400)             0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 100)               6240100   
+_________________________________________________________________
+dense_2 (Dense)              (None, 1)                 101       
+=================================================================
+Total params: 6,240,201
+Trainable params: 6,240,201
+Non-trainable params: 0
+_________________________________________________________________
+Training with 13 training steps, 4 validation steps.
+Epoch 1/10
+2019-03-18 23:13:12.027618: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-03-18 23:13:12.034550: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_UNKNOWN: unknown error
+2019-03-18 23:13:12.034586: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: ubuntu16
+2019-03-18 23:13:12.034595: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: ubuntu16
+2019-03-18 23:13:12.034640: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:194] libcuda reported version is: 384.130.0
+2019-03-18 23:13:12.034666: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:198] kernel reported version is: 384.130.0
+2019-03-18 23:13:12.034675: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:305] kernel version seems to match DSO: 384.130.0
+13/13 [==============================] - 7s 508ms/step - loss: 401.1512 - mean_absolute_error: 5.0288 - val_loss: 0.0400 - val_mean_absolute_error: 0.1528
+Epoch 2/10
+13/13 [==============================] - 6s 461ms/step - loss: 0.4054 - mean_absolute_error: 0.5425 - val_loss: 0.0477 - val_mean_absolute_error: 0.1667
+Epoch 3/10
+13/13 [==============================] - 6s 466ms/step - loss: 0.4084 - mean_absolute_error: 0.5424 - val_loss: 0.0377 - val_mean_absolute_error: 0.1480
+Epoch 4/10
+13/13 [==============================] - 6s 469ms/step - loss: 0.4128 - mean_absolute_error: 0.5453 - val_loss: 0.0467 - val_mean_absolute_error: 0.1633
+Epoch 5/10
+13/13 [==============================] - 6s 482ms/step - loss: 0.4126 - mean_absolute_error: 0.5477 - val_loss: 0.0412 - val_mean_absolute_error: 0.1572
+Epoch 6/10
+13/13 [==============================] - 6s 480ms/step - loss: 0.4038 - mean_absolute_error: 0.5398 - val_loss: 0.0442 - val_mean_absolute_error: 0.1579
+Epoch 7/10
+13/13 [==============================] - 6s 475ms/step - loss: 0.4143 - mean_absolute_error: 0.5481 - val_loss: 0.0462 - val_mean_absolute_error: 0.1630
+Epoch 8/10
+13/13 [==============================] - 6s 468ms/step - loss: 0.4159 - mean_absolute_error: 0.5476 - val_loss: 0.0398 - val_mean_absolute_error: 0.1517
+Epoch 9/10
+13/13 [==============================] - 6s 476ms/step - loss: 0.4160 - mean_absolute_error: 0.5482 - val_loss: 0.0469 - val_mean_absolute_error: 0.1622
+Epoch 10/10
+13/13 [==============================] - 6s 466ms/step - loss: 0.4085 - mean_absolute_error: 0.5454 - val_loss: 0.0412 - val_mean_absolute_error: 0.1538
+```
+
+
+
 
 
 ## 4.2 NVIDIA Pilot Network [2]

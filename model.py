@@ -1,3 +1,54 @@
+## FC Newtork
+class FCNet:
+    def __init__(self):
+        from keras.models import Sequential
+        from keras.layers import Cropping2D, Lambda, Flatten, Dense
+        from keras import optimizers
+        from keras.callbacks import ModelCheckpoint
+
+        self.model = Sequential()
+        
+        # Input layer
+        self.model.add(Cropping2D(cropping = ((70, 25), (0, 0)), input_shape = (160, 320, 3)))
+
+        #self.model.add(Lambda(lambda x: (x/127.5)-1.0))
+
+        # Flatten
+        self.model.add(Flatten())
+        
+        # Hidden layer
+        self.model.add(Dense(100, activation='relu'))
+
+        # Output layer
+        self.model.add(Dense(1, activation='relu'))
+        
+        # Optimizer
+        optimizer = optimizers.Adagrad(lr=0.01)
+
+        # Compile
+        self.model.compile(loss='mse', optimizer=optimizer, metrics=['mae'])
+
+        self.model.summary()
+
+        model_checkpoint = ModelCheckpoint('fcnet-{epoch:02d}.h5', save_best_only=True)
+        self.callbacks = [model_checkpoint]
+
+    def fit(self, train_generator, valid_generator, training_steps, validation_steps, epochs=10):
+        print("Training with {} training steps, {} validation steps.".format(training_steps, validation_steps))
+
+        self.model.fit_generator(generator = train_generator,
+                                 steps_per_epoch = training_steps,
+                                 validation_data = valid_generator,
+                                 validation_steps = validation_steps,
+                                 epochs = epochs,
+                                 callbacks = self.callbacks)
+        
+
+        
+
+
+
+
 ##  Nvidia Network
 
 ## A modified nvidia network
@@ -151,5 +202,5 @@ bias_regularizer=None, activity_regularizer=None,
 kernel_constraint=None, bias_constraint=None)
 
 
-model.add(Cropping2D(cropping = ((70, 25), (0, 0)), input_shape = (160, 320, 3)))
+
 '''

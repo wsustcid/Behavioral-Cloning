@@ -11,9 +11,7 @@ from sklearn.model_selection import train_test_split
 STEERING_CORRECTION_LEFT  = 0.2
 STEERING_CORRECTION_RIGHT = 0.2
 USE_SIDE_CAMERAS = True 
-FLIP_IMAGES = True
-
-count =0
+FLIP_IMAGES = False
 
 ## Customize data structure
 class SteeringData:
@@ -154,13 +152,13 @@ def fix_distribution(training_set, bin_edges, hist, desired_per_bin):
 # Then resize to original size since the test image saved by drive.py is (320,160,3)
 def preprocess_image(img):
 
-    bgr = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    cropped = bgr[50:140, :] # height, width
+    rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    #cropped = bgr[50:140, :] # height, width
     #resized = cv2.resize(cropped, (128,128))
     
-    resized = cv2.resize(cropped, (320,160)) # width, height
+    #resized = cv2.resize(cropped, (320,160)) # width, height
 
-    return resized
+    return rgb
 
 ## 
 def random_blur(image):

@@ -2,6 +2,7 @@ import math
 import sys
 
 import data
+from model import FCNet
 from model import Modified_Nvidia_Netwrok
 
 BATCH_SIZE = 256
@@ -40,8 +41,11 @@ if __name__ == "__main__":
     valid_generator = data.get_generator(validation_set, BATCH_SIZE)
 
 
-    ## Modified Nvidia Network
-    model = Modified_Nvidia_Netwrok()
+    ##-- Modified Nvidia Network --##
+    #model = Modified_Nvidia_Netwrok()
+
+    ##-- FCNet --##
+    model = FCNet()
 
     ##
     training_steps = math.ceil(len(training_set)/BATCH_SIZE)
@@ -52,7 +56,7 @@ if __name__ == "__main__":
               NUMBER_EOPCHS)
     
     ## save model
-    model.save_model('modified_nvidia_model.h5')
+    #model.save_model('modified_nvidia_model.h5')
 
     ## evaluate model
 
