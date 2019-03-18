@@ -13,7 +13,9 @@ STEERING_CORRECTION_RIGHT = 0.2
 USE_SIDE_CAMERAS = True 
 FLIP_IMAGES = True
 
-## self defined data structure
+count =0
+
+## Customize data structure
 class SteeringData:
     def __init__(self, image_path, steer, flipped_flag):
         self.image_path = image_path
@@ -25,7 +27,9 @@ class SteeringData:
 
 
 ## Reading data from csv file 
-## saving it as the self defined data structure
+# saving it as the customized data structure
+# The flipped_flag and the label of each flipped image should be saved 
+# if we use flipped images.
 def csv_read(csv_path):
     print("Reading data from csv file...")
     data = []
@@ -36,8 +40,10 @@ def csv_read(csv_path):
             center_image_path = line[0]
             if os.path.isfile(center_image_path):
                 center_steer = float(line[3])
+                # the flipped_flag is zero
                 data.append(SteeringData(center_image_path, center_steer, 0))
                 if FLIP_IMAGES:
+                    # set the flipped_flag to one to for flipping image when generating data
                     data.append(SteeringData(center_image_path, -center_steer,1)) 
 
             if USE_SIDE_CAMERAS:
@@ -58,14 +64,14 @@ def csv_read(csv_path):
     return shuffle(data)
 
 
-## return training and validation data sets
+## Spliting data to training data and validation data
 def load_data_sets(csv_path, split=0.2):
     data = csv_read(csv_path)
     train, valid = train_test_split(data, test_size=split)
 
     return train, valid
     
-
+## Getting bin counts of a data set
 def get_bin_counts(x):
     steers = [item.steer for item in x]
 
@@ -120,7 +126,7 @@ def augment_dataset(x, fix_dist):
         return x + augmented
 
 ## 
-def fix_distribution(x, bin_edges, hist, desired_per_bin):
+def fix_distribution(training_set, bin_edges, hist, desired_per_bin):
     # ensure we don't divide by zero
     non_zero_hist = np.array(hist)
     non_zero_hist[non_zero_hist==0] = desired_per_bin
@@ -138,32 +144,31 @@ def fix_distribution(x, bin_edges, hist, desired_per_bin):
 
     return trimmed_training_set
 
-## 
+## images are loaded in BGR colorspace by OpenCV with the shape of
+#  (160, 320, 3).  (H, W, C)
+#  But drive.py loads image in RGB.
+#  Thus the training image will convert to RGB to ensure the consistency of colorspace
+
+## Crop 50 pixels off the top of the image,
+#  and 20 pixels off the bottom. 
+# Then resize to original size since the test image saved by drive.py is (320,160,3)
 def preprocess_image(img):
-    # img coming in is an RGB image of shape: (160, 320, 3).  
-    # Convert to BGR, (the trained network processinh BGR image)
-    # Crop 50 pixels off the top of the image, and 20 pixels off the bottom. 
-    # Then resize to 128, 128, 3
-    
-    ## ??
-    bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+    bgr = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     cropped = bgr[50:140, :] # height, width
     #resized = cv2.resize(cropped, (128,128))
+    
     resized = cv2.resize(cropped, (320,160)) # width, height
 
     return resized
 
 ## 
 def random_blur(image):
-      #
     # Generate a random odd number for our
     # kernel size between 3 and 9
-    #
     kernel_size = (np.random.randint(1, 5) * 2) + 1
 
-    #
     # Blur and return
-    #
     return cv2.GaussianBlur(image, (kernel_size, kernel_size),  0)
 
 ## 
@@ -241,6 +246,7 @@ def random_brightness(image):
 
 
 
+## Reading data from local files
 ## process images by their flags 
 def get_generator(images, batch_size):
     while True:
@@ -253,14 +259,14 @@ def get_generator(images, batch_size):
         y = []
 
         for index in range(len(batch)):
+            # instance a custom class
             image_data = batch[index]
-
+            
             image_path = image_data.image_path
 
             if os.path.isfile(image_path):
                 # Read the image, apply data augmentation
                 # and add to the batch
-
                 image = cv2.imread(image_path)
                 steer = image_data.steer
 
@@ -276,7 +282,7 @@ def get_generator(images, batch_size):
 
                     if image_data.shadow_flag == 1:
                         image = random_shadow(image)
-
+                    # covert to RGB
                     image = preprocess_image(image)
 
                     X.append(image)

@@ -5,7 +5,7 @@ import data
 from model import Modified_Nvidia_Netwrok
 
 BATCH_SIZE = 256
-AUGMENT_DATA = False
+AUGMENT_DATA = True
 FIX_DISTRIBUTION = True
 
 if __name__ == "__main__":
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     ## Load the image paths and steering data into memory from 
     # the csv file. Images are not actually loaded until needed
     # by the generator when making batches
-    data_path = '/media/ubuntu16/新加卷/Self-Driving/datasets/carnd/' 
+    data_path = '/media/ubuntu16/Documents/datasets/CarND/' 
     csv_path = data_path + 'driving_log.csv'
     
     training_set, validation_set = data.load_data_sets(csv_path)
@@ -41,14 +41,19 @@ if __name__ == "__main__":
 
 
     ## Modified Nvidia Network
-    #model_path = 
-    model = Modified_Nvidia_Netwrok('model-{epoch:02d}.h5')
+    model = Modified_Nvidia_Netwrok()
 
     ##
     training_steps = math.ceil(len(training_set)/BATCH_SIZE)
     validation_steps = math.ceil(len(validation_set)/BATCH_SIZE)
 
     ## train
-    model. fit(train_generator, valid_generator, training_steps, validation_steps, NUMBER_EOPCHS)
+    model.fit(train_generator, valid_generator, training_steps, validation_steps, 
+              NUMBER_EOPCHS)
+    
+    ## save model
+    model.save_model('modified_nvidia_model.h5')
+
+    ## evaluate model
 
 

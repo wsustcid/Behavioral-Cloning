@@ -1,5 +1,8 @@
+##  Nvidia Network
+
+## A modified nvidia network
 class Modified_Nvidia_Netwrok:
-    def __init__(self, save_path):
+    def __init__(self):
         from keras.models import Sequential
         from keras.layers import Flatten, Dense, Conv2D, Lambda, Dropout
         from keras.layers.pooling import MaxPooling2D
@@ -12,26 +15,25 @@ class Modified_Nvidia_Netwrok:
 
         self.model = Sequential()
 
-        # Normalization (None, 128, 128, 3)
+        # Normalization: converts the input from uint8 to float between -1 and 1
         self.model.add(Lambda(lambda x: (x / 127.5) - 1., input_shape=(160, 320, 3)))
 
-        # Convolutional Layer (None, 124, 124, 24)
+        # Conv1
         self.model.add(Conv2D(24, kernel_size=(5,5), padding='valid', activation='relu'))
-        # Maxpooling Layer (None, 62, 62, 24)
         self.model.add(MaxPooling2D(pool_size=(2,2)))
 
-        # (None, 58, 58, 36) -> (None, 29, 29, 36)
+        # Conv2
         self.model.add(Conv2D(36, kernel_size=(5,5), padding='valid', activation='relu'))
         self.model.add(MaxPooling2D(pool_size=(2,2)))
 
-        # (None, 25, 25, 48) -> (None, 12, 12, 48)
+        # Conv3
         self.model.add(Conv2D(48, kernel_size=(5,5), padding='valid', activation='relu'))
         self.model.add(MaxPooling2D(pool_size=(2,2)))
 
-        # (None, 10, 10, 64)
+        # Conv4
         self.model.add(Conv2D(64, kernel_size=(3,3), padding='valid', activation='relu'))
         
-        # (None, 8, 8, 64)
+        # conv5
         self.model.add(Conv2D(64, kernel_size=(3,3), padding='valid', activation='relu'))
 
         # Flattening Layer (None, 4096)
@@ -40,34 +42,35 @@ class Modified_Nvidia_Netwrok:
         # Dropout 0.5 (None, 4096)
         self.model.add(Dropout(0.5))
 
-        # Fully Connected (None, 1164)
+        # FC1 (None, 1164)
         self.model.add(Dense(1164, activation='relu'))
         
-        # 
+        # Dropout
         self.model.add(Dropout(0.5))
 
-        # (None, 100)
+        # FC2 (None, 100)
         self.model.add(Dense(100, activation='relu'))
 
-        # (None, 50)
+        # FC3 (None, 50)
         self.model.add(Dense(50, activation='relu'))
 
-        # (None, 10)
+        # FC4 (None, 10)
         self.model.add(Dense(10, activation='relu'))
 
-        # (None, 1)
+        # FC5 (None, 1)
         self.model.add(Dense(1, kernel_initializer='normal'))
 
         
-        ## optimizer
-        optimizer = optimizers.Adam(lr = 0.0001)
+        ## Optimizer
+        optimizer = optimizers.Adam(lr = 0.001)
 
-        self.model.compile(loss='mse', optimizer=optimizer, metrics=['accuracy'])
+        ## Compile
+        self.model.compile(loss='mse', optimizer=optimizer, metrics=['mae'])
 
         self.model.summary()
         # Use the keras ModelCheckpoint to save the model 
         # afer every epoch
-        model_checkpoint = ModelCheckpoint(save_path, save_best_only=True)
+        model_checkpoint = ModelCheckpoint('modified_nvidia_model-{epoch:02d}.h5', save_best_only=True)
         self.callbacks = [model_checkpoint]
 
 
@@ -89,6 +92,10 @@ class Modified_Nvidia_Netwrok:
                                  validation_steps = validation_steps,
                                  epochs = epochs,
                                  callbacks = self.callbacks)
+
+    def save_model(self, save_path):
+
+        self.model.save(save_path)
 
 '''
 import os
@@ -142,4 +149,7 @@ use_bias=True, kernel_initializer='glorot_uniform',
 bias_initializer='zeros', kernel_regularizer=None, 
 bias_regularizer=None, activity_regularizer=None, 
 kernel_constraint=None, bias_constraint=None)
+
+
+model.add(Cropping2D(cropping = ((70, 25), (0, 0)), input_shape = (160, 320, 3)))
 '''
