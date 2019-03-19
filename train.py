@@ -3,6 +3,7 @@ import sys
 
 import data
 from model import FCNet
+from model import PilotNet
 from model import Modified_Nvidia_Netwrok
 
 BATCH_SIZE = 256
@@ -11,7 +12,7 @@ FIX_DISTRIBUTION = True
 
 if __name__ == "__main__":
     
-    NUMBER_EOPCHS = 10
+    NUMBER_EOPCHS = 20
     
     # sys.argv[0] is the dir of the runned file
     if len(sys.argv) > 1:
@@ -45,7 +46,10 @@ if __name__ == "__main__":
     #model = Modified_Nvidia_Netwrok()
 
     ##-- FCNet --##
-    model = FCNet()
+    #model = FCNet()
+
+    ##-- PilotNet --##
+    model = PilotNet()
 
     ##
     training_steps = math.ceil(len(training_set)/BATCH_SIZE)

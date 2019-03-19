@@ -44,12 +44,79 @@ class FCNet:
                                  callbacks = self.callbacks)
         
 
-        
-
-
-
-
 ##  Nvidia Network
+class PilotNet():
+    def __init__(self):
+        from keras.models import Sequential
+        from keras.layers import Cropping2D, Lambda, Conv2D, Flatten, Dense
+        from keras import optimizers
+        from keras.callbacks import ModelCheckpoint
+
+        self.model = Sequential()
+        
+        # Cropping (90, 320,3)
+        self.model.add(Cropping2D(cropping=((50,20),(0,0)), input_shape=(160,320,3)))
+        
+        # Normalization 255 or 127?
+        self.model.add(Lambda(lambda x: (x/127.5)-1.0))
+
+        # Conv1 (43,158,24)
+        self.model.add(Conv2D(24, kernel_size=(5,5), strides=(2,2), padding='valid', activation='relu'))
+
+        # Conv2 (20,77,36)
+        self.model.add(Conv2D(36, kernel_size=(5,5), strides=(2,2), padding='valid', activation='relu'))
+
+        # Conv3 (8,37,48)
+        self.model.add(Conv2D(48, kernel_size=(5,5), strides=(2,2), padding='valid', activation='relu'))
+
+        # conv4 (6,35,64)
+        self.model.add(Conv2D(64, kernel_size=(3,3), strides=(1,1), padding='valid', activation='relu'))
+
+        # Conv5 (4, 33, 64)
+        self.model.add(Conv2D(64, kernel_size=(3,3), strides=(1,1), padding='valid', activation='relu'))
+
+        # Flatten (None, 8448)
+        self.model.add(Flatten())
+
+        # FC1
+        self.model.add(Dense(1164, activation='relu'))
+
+        # FC2
+        self.model.add(Dense(100, activation='relu'))
+
+        # FC3
+        self.model.add(Dense(50, activation='relu'))
+
+        # FC4
+        self.model.add(Dense(10, activation='relu'))
+
+        # FC5
+        self.model.add(Dense(1))
+
+        ## Optimizer
+        #optimizer = optimizers.Adam(lr=0.001)
+        
+        ## Compile
+        self.model.compile(loss='mse', optimizer='adam', metrics=['mae'])
+
+        self.model.summary()
+
+        model_checkpoint = ModelCheckpoint('PilotNet-{epoch:02d}.h5', save_best_only=True)
+
+        self.callbacks = [model_checkpoint]
+    
+    def fit(self, train_generator, valid_generator, training_steps, validation_steps, epochs=10):
+        print("Training with {} steps, {} validation steps.".format(training_steps, validation_steps))
+
+        self.model.fit_generator(train_generator,
+                                 steps_per_epoch = training_steps,
+                                 validation_data = valid_generator,
+                                 validation_steps = validation_steps,
+                                 epochs = epochs,
+                                 callbacks = self.callbacks)
+
+
+
 
 ## A modified nvidia network
 class Modified_Nvidia_Netwrok:

@@ -150,7 +150,7 @@ Please see the [CarND-Capstone Releases](https://github.com/udacity/CarND-Capsto
 - [x] Achieving a simple version by imitating solutions provided in other people's projects.
 
   - https://github.com/csharpseattle/CarND-Behavioral-Cloning
-- [ ] Writing a project document
+- [x] Writing a project document
 - [ ] Reading and organizing related papers and projects to improve the performence of the original methods or propose a new method.
   - End to End Learning for Self-Driving Cars (Write the network by hand)
 
@@ -307,7 +307,11 @@ model.add(Cropping2D(cropping=((70,25), (0,0))))
 
 **Data collection was done using the simulator in 'Training Mode.'**  
 
-1. At first, I gathered 1438 images from a full lap around track.
+1. At first, I gathered 1438 images from a full lap around track. 
+   - However, the newtork can not converge
+2. Then I collected another 1500 images by driving the car around a full track.
+   - The total numbers of images are about 7000 by counting two side images
+   - Those images can not make PilotNet converge, but the performance of the modified nvidia network  not bad.
 
 I gathered 23607 images for the first track. More images were gatered in the turning of the track than in the usual driving.
 
@@ -573,9 +577,7 @@ Epoch 10/10
 
 
 
-
-
-## 4.2 NVIDIA Pilot Network [2]
+## 4.2 NVIDIA pilotNet [2]
 
 [3] Bojarski, M.. (2016). **End to End Learning for Self-Driving Cars**, 1–9. https://doi.org/10.2307/2529309
 
@@ -591,7 +593,188 @@ Compared to explicit decomposition of the problem, such as lane marking detectio
 >
 > [2] Net-Scale Technologies, Inc. Autonomous off-road vehicle control using end-to-end learning, July 2004. Final technical report. URL: http://net-scale.com/doc/net-scale-dave-report.pdf.
 
-he primary motivation for this work is to avoid the need to recognize specific human-designated features, such as lane markings, guard rails, or other cars, and to avoid having to create a collection of “if, then, else” rules, based on observation of these features. 
+The primary motivation for this work is to **avoid the need to recognize specific human-designated features,** such as lane markings, guard rails, or other cars, and to avoid having to create a collection of “if, then, else” rules, based on observation of these features. 
+
+### 4.2.2 Overview of the DAVE-2 System
+
+1. In order to make our system independent of the car geometry, we represent the steering command as 1/r where r is the turning radius in meters. We use 1/r instead of r to prevent a singularity when driving straight (the turning radius for driving straight is infinity). 1/r smoothly transitions through zero from left turns (negative values) to right turns (positive values).
+   Training
+2. Training data contains single images sampled from the video, paired with the corresponding steering command (1/r). 
+3. Training with data from only the human driver is not sufficient. **The network must learn how to recover from mistakes.** Otherwise the car will slowly drift off the road. 
+4. **The training data is therefore augmented with additional images that show the car in different shifts from the center of the lane and rotations from the direction of the road.**
+5. Images for two specific off-center shifts can be obtained from the left and the right camera. **Additional shifts between the cameras and all rotations are simulated by viewpoint transformation of the image from the nearest camera.** Precise viewpoint transformation requires 3D scene knowledge which we don’t have. We therefore approximate the transformation by **assuming all points below the horizon are on flat ground and all points above the horizon are infinitely far away.** This works fine for flat terrain but it introduces distortions for objects that stick above the ground, such as cars, poles, trees, and buildings. Fortunately these distortions don’t pose a big problem for network training. **The steering label for transformed images is adjusted to one that would steer the vehicle back to the desired location and orientation in two seconds.**
+
+![](examples/training_system.png)
+
+### 4.2.3 Data Collection
+
+Training data was collected by driving on a wide variety of roads and in a diverse set of lighting and weather conditions. 
+
+- Most road data was collected in central New Jersey, although highway data was also collected from Illinois, Michigan, Pennsylvania, and New York. 
+- Other road types include 
+  - two-lane roads (with and without lane markings), 
+  - residential roads with parked cars, tunnels, and unpaved roads. 
+
+- Data was collected in clear, cloudy, foggy, snowy, and rainy weather, both day and night. In some instances, the sun was low in the sky, resulting in glare reflecting from the road surface and scattering from the windshield.
+
+### 4.2.4 Network Architecture
+
+1. The network consists of 9 layers, including a normalization layer, 5 convolutional layers and 3 fully connected layers. 
+
+   ![](examples/nvidia_network.png)
+
+2. The input image is split into **YUV planes** and passed to the network.
+
+3. The first layer of the network performs image normalization. The normalizer is hard-coded and is not adjusted in the learning process. Performing normalization in the network allows the normalization scheme to be altered with the network architecture and to be accelerated via GPU processing.
+
+4. We use strided convolutions in the first three convolutional layers with a 2×2 stride and a 5×5 kernel and **a non-strided convolution (1 stride)** with a 3×3 kernel size in the last two convolutional layers. 
+
+### 4.2.5 Training Details
+
+#### Data Selection
+- Our collected data is labeled with road type, weather condition, and the driver’s activity (staying in a lane, switching lanes, turning, and so forth). 
+
+- To train a CNN to do lane following we only select data where the driver was staying in a lane and discard the rest. 
+- We then **sample that video at 10 FPS**. A higher sampling rate would result in including images that are highly similar and thus not provide much useful information.
+- To remove a bias towards driving straight the **training data includes a higher proportion of frames that represent road curves.**
+
+#### Augmentation
+We augment the data by 
+
+- adding artificial shifts and rotations to teach the network how to recover from a poor position or orientation. **The magnitude of these perturbations is chosen randomly from a normal distribution.** 
+- **The distribution has zero mean, and the standard deviation is twice the standard deviation that we measured with human drivers.** 
+- Artificially augmenting the data does add undesirable artifacts as the magnitude increases (see Section 2).
+
+### 4.2.6 Simulation
+
+
+
+### 4.2.7 Evaluation
+
+We estimate what percentage of the time the network could drive the car (autonomy). The metric is determined by counting simulated human interventions (see Section 6). These interventions occur when the simulated vehicle departs from the center line by more than one meter.
+
+We assume that in real life an actual intervention would require a total of six seconds: this is the time required for a human to retake control of the vehicle, re-center it, and then restart the self-steering mode.
+$$
+autonomy = (1-\frac{(number\ of\ interventions)\cdot 6\ seconds}{elapsed\ time\ [seconds]})\cdot 100
+$$
+
+
+Figures 7 and 8 show the activations of the first two feature map layers for two different example inputs.
+
+This demonstrates that the CNN learned to detect useful road features on its own, i. e., with only the human steering angle as training signal. We never explicitly trained it to detect the outlines of roads, for example.
+
+### 4.2.8 Conclusions
+
+We have empirically demonstrated that CNNs are able to learn the entire task of lane and road following without manual decomposition into road or lane marking detection, semantic abstraction, path planning, and control. A small amount of training data from less than a hundred hours of driving was sufficient to train the car to operate in diverse conditions, on highways, local and residential roads in sunny, cloudy, and rainy conditions. The CNN is able to learn meaningful road features from a very sparse training signal (steering alone).
+The system learns for example to detect the outline of a road without the need of explicit labels during training. More work is needed to improve the robustness of the network, to find methods to verify the robust- ness, and to improve visualization of the network-internal processing steps.
+References
+
+
+
+### 4.2.9 Training Process
+
+1. Two laps of track images can not make the network converge
+2. Fixing data distribution can decrease the mse of the predictions at first two epochs. But the mse will not decrease significantly by increasing the number of epochs.
+
+
+
+```bash
+Reading data from csv file...
+Reading is done.
+EPOCHS: 20
+Training Set Size: 6698
+Valization Set Size: 1675
+Batch Size: 256
+/home/ubuntu16/Behavioral_Cloning/data.py:102: RuntimeWarning: divide by zero encountered in true_divide
+  copy_times = np.float32((desired_per_bin-hist)/hist)
+Training set size now: 6122
+Using TensorFlow backend.
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+cropping2d_1 (Cropping2D)    (None, 90, 320, 3)        0         
+_________________________________________________________________
+lambda_1 (Lambda)            (None, 90, 320, 3)        0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 43, 158, 24)       1824      
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 20, 77, 36)        21636     
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 8, 37, 48)         43248     
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 6, 35, 64)         27712     
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 4, 33, 64)         36928     
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 8448)              0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 1164)              9834636   
+_________________________________________________________________
+dense_2 (Dense)              (None, 100)               116500    
+_________________________________________________________________
+dense_3 (Dense)              (None, 50)                5050      
+_________________________________________________________________
+dense_4 (Dense)              (None, 10)                510       
+_________________________________________________________________
+dense_5 (Dense)              (None, 1)                 11        
+=================================================================
+Total params: 10,088,055
+Trainable params: 10,088,055
+Non-trainable params: 0
+_________________________________________________________________
+Training with 24 steps, 7 validation steps.
+Epoch 1/20
+2019-03-19 18:20:55.078545: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-03-19 18:20:55.173613: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:964] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-03-19 18:20:55.173986: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX 1080 major: 6 minor: 1 memoryClockRate(GHz): 1.8095
+pciBusID: 0000:01:00.0
+totalMemory: 7.92GiB freeMemory: 7.24GiB
+2019-03-19 18:20:55.174015: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2019-03-19 18:20:55.375570: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-03-19 18:20:55.375612: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2019-03-19 18:20:55.375633: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2019-03-19 18:20:55.375798: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6985 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080, pci bus id: 0000:01:00.0, compute capability: 6.1)
+24/24 [==============================] - 11s 438ms/step - loss: 0.2917 - mean_absolute_error: 0.4121 - val_loss: 0.0490 - val_mean_absolute_error: 0.1765
+Epoch 2/20
+24/24 [==============================] - 9s 395ms/step - loss: 0.0581 - mean_absolute_error: 0.1890 - val_loss: 0.0403 - val_mean_absolute_error: 0.1485
+Epoch 3/20
+24/24 [==============================] - 10s 402ms/step - loss: 0.0366 - mean_absolute_error: 0.1501 - val_loss: 0.0293 - val_mean_absolute_error: 0.1267
+Epoch 4/20
+24/24 [==============================] - 10s 404ms/step - loss: 0.0275 - mean_absolute_error: 0.1297 - val_loss: 0.0334 - val_mean_absolute_error: 0.1427
+Epoch 5/20
+24/24 [==============================] - 10s 401ms/step - loss: 0.0253 - mean_absolute_error: 0.1225 - val_loss: 0.0268 - val_mean_absolute_error: 0.1228
+Epoch 6/20
+24/24 [==============================] - 10s 406ms/step - loss: 0.0201 - mean_absolute_error: 0.1097 - val_loss: 0.0248 - val_mean_absolute_error: 0.1173
+Epoch 7/20
+24/24 [==============================] - 10s 405ms/step - loss: 0.0179 - mean_absolute_error: 0.1029 - val_loss: 0.0219 - val_mean_absolute_error: 0.1156
+Epoch 8/20
+24/24 [==============================] - 10s 406ms/step - loss: 0.0139 - mean_absolute_error: 0.0891 - val_loss: 0.0252 - val_mean_absolute_error: 0.1230
+Epoch 9/20
+24/24 [==============================] - 10s 407ms/step - loss: 0.0130 - mean_absolute_error: 0.0862 - val_loss: 0.0239 - val_mean_absolute_error: 0.1229
+Epoch 10/20
+24/24 [==============================] - 10s 404ms/step - loss: 0.0114 - mean_absolute_error: 0.0803 - val_loss: 0.0201 - val_mean_absolute_error: 0.1115
+Epoch 11/20
+24/24 [==============================] - 10s 409ms/step - loss: 0.0104 - mean_absolute_error: 0.0764 - val_loss: 0.0229 - val_mean_absolute_error: 0.1213
+Epoch 12/20
+24/24 [==============================] - 10s 406ms/step - loss: 0.0097 - mean_absolute_error: 0.0743 - val_loss: 0.0276 - val_mean_absolute_error: 0.1307
+Epoch 13/20
+24/24 [==============================] - 10s 406ms/step - loss: 0.0093 - mean_absolute_error: 0.0729 - val_loss: 0.0240 - val_mean_absolute_error: 0.1216
+Epoch 14/20
+24/24 [==============================] - 10s 403ms/step - loss: 0.0084 - mean_absolute_error: 0.0676 - val_loss: 0.0219 - val_mean_absolute_error: 0.1159
+Epoch 15/20
+24/24 [==============================] - 10s 405ms/step - loss: 0.0067 - mean_absolute_error: 0.0606 - val_loss: 0.0206 - val_mean_absolute_error: 0.1129
+Epoch 16/20
+24/24 [==============================] - 10s 405ms/step - loss: 0.0066 - mean_absolute_error: 0.0616 - val_loss: 0.0284 - val_mean_absolute_error: 0.1347
+Epoch 17/20
+24/24 [==============================] - 10s 406ms/step - loss: 0.0059 - mean_absolute_error: 0.0581 - val_loss: 0.0203 - val_mean_absolute_error: 0.1136
+Epoch 18/20
+24/24 [==============================] - 10s 404ms/step - loss: 0.0053 - mean_absolute_error: 0.0531 - val_loss: 0.0206 - val_mean_absolute_error: 0.1141
+Epoch 19/20
+24/24 [==============================] - 10s 407ms/step - loss: 0.0049 - mean_absolute_error: 0.0522 - val_loss: 0.0223 - val_mean_absolute_error: 0.1164
+Epoch 20/20
+24/24 [==============================] - 10s 400ms/step - loss: 0.0043 - mean_absolute_error: 0.0484 - val_loss: 0.0203 - val_mean_absolute_error: 0.1128
+```
 
 
 
@@ -622,6 +805,13 @@ The final network is as follows:
 |  5th Fully Connected   |      (1)       |      11 |
 
 ### Training
+
+
+
+1. The trained network can drive the car across the full tack with 9 mph.
+2. Two laps of track images are used. The distribution of the data was fixed duiring training. The data set did not flipped.
+3. You must make the car driving along the center of the track. Otherwise, the car will drive out of the track will testing.
+4. finall loss is 0.02 (后面几乎不再降低)
 
 ------
 
