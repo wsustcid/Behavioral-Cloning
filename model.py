@@ -9,9 +9,9 @@ class FCNet:
         self.model = Sequential()
         
         # Input layer
-        self.model.add(Cropping2D(cropping = ((70, 25), (0, 0)), input_shape = (160, 320, 3)))
+        self.model.add(Cropping2D(cropping = ((50, 20), (0, 0)), input_shape = (160, 320, 3)))
 
-        #self.model.add(Lambda(lambda x: (x/127.5)-1.0))
+        self.model.add(Lambda(lambda x: (x/127.5)-1.0))
 
         # Flatten
         self.model.add(Flatten())
@@ -19,11 +19,12 @@ class FCNet:
         # Hidden layer
         self.model.add(Dense(100, activation='relu'))
 
-        # Output layer
-        self.model.add(Dense(1, activation='relu'))
+        # Output layer 
+        # Without activation funcation!
+        self.model.add(Dense(1))
         
         # Optimizer
-        optimizer = optimizers.Adagrad(lr=0.01)
+        optimizer = optimizers.Adagrad()
 
         # Compile
         self.model.compile(loss='mse', optimizer=optimizer, metrics=['mae'])

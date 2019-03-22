@@ -177,85 +177,15 @@ Please see the [CarND-Capstone Releases](https://github.com/udacity/CarND-Capsto
 
 ### 2.2 Tips
 
-- 
-
-
-
-数据集格式（.csv 文件）：
-
-Center Image Left Image Right Image Steering Throttle Brake Speed
-
-dir
-
-数据集读取：
-
-
-
-
-
-Simple network:
-
-```
-from keras.models import Sequential
-form keras.layers import Flatten, Dense
-
-model = Sequential()
-model.add(Flatten(input_shape=(160,320,3)))
-model.add(Dense(1))
-
-model.compile(loss='mse', optimizer='adam)
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True)
-
-model.save(model.h5)
-```
-
-run:
-
-```
-python model.py
-```
-
-
-
-running model in simulator:
-
-```
-## clone repo: CarNd-Behavioral-Cloning-P3
-## drive.py will load the trained model and make steering predictions
-python dirve.py model.h5
-## waiting for the simulator to start in autonomous mode
-```
-
-
-
-preprocessing data 
-
-normalizing data & mean centering data
-
-```
-model.add(Lambda(lambda x: x/255.0) - 0.5, input_shape(160, 320, 3))
-model.add(Flatten())
-```
-
-
-
-More powerful network
-
-LeNet
-
-
-
-Problem：
+#### Problem：
 
 the car seems to pull too hard to the left
 
-Reason:
+#### Reason:
 
 The training track is a loop, and the car drives counter-clockwise. So most of the time, the model is learning to steer to the left. Then in the autonomous model, the model does steer to the left even in situations when  staying straight might be best.
 
-
-
-solution - data augmentation  :
+#### solution - data augmentation  :
 
 flip the images horizontally like a mirror. (invert steer angles)
 
@@ -263,41 +193,13 @@ change the brightness on the images
 
 shift them horizontally or vertically
 
-
-
-results:
+#### results:
 
 we have more data
 
 the data is more comprehensive
 
-```python
-augmented_images, augmented_measurements = [], []
 
-for image, measurement in zip(images, measurements):
-    augmented_images.append(image)
-    augmented_measurements.append(measurement)
-    augmented_images.append(cv2.flip(image,1))
-    augmented_measurements.append(measurement*-1.0)
-```
-
-
-
- cropping
-
-use a build-in Keras layer to perform the cropping inside of the model
-
-```
-model.add(Cropping2D(cropping=((70,25), (0,0))))
-```
-
-
-
-使用左右侧图片，转向角使用实际转向角的修正
-
-在容易失败的区域反复采集数据
-
- 收集反向驾驶数据
 
 
 
@@ -307,13 +209,11 @@ model.add(Cropping2D(cropping=((70,25), (0,0))))
 
 **Data collection was done using the simulator in 'Training Mode.'**  
 
-1. At first, I gathered 1438 images from a full lap around track. 
-   - However, the newtork can not converge
-2. Then I collected another 1500 images by driving the car around a full track.
-   - The total numbers of images are about 7000 by counting two side images
-   - Those images can not make PilotNet converge, but the performance of the modified nvidia network  not bad.
+1. At first, I gathered 1438 images from a full lap around track. But I can not always keep the car driving at the center line of the road. This is not a good data set and some previous experience have shown that this kind of data will make the car pull too hard while testing. So I discard it. 
+2. Then I collected a new data set which contains 2791(x3) images by driving the car travel the full track two times.
+   - The total numbers of images are about 8000 by counting two side images
 
-I gathered 23607 images for the first track. More images were gatered in the turning of the track than in the usual driving.
+
 
 > After much trial and error I found that it was not necessary to gather images from a full lap around each track. For the first track I drove just past the bridge to the first dirt patch and for the mountain track I drove only half-way around.  
 >
@@ -323,7 +223,11 @@ I gathered 23607 images for the first track. More images were gatered in the tur
 >
 > In the end I gathered over 3500 images from each track for a total data set size of 7650 images.
 
+tips:
 
+- use left and right images and their corresponding steering angle is the original steering angle adding (left) or subtracting (right) a correction angle
+- collecting more data at the easily failed place such as the turn track.
+- Collecting the revise driving data
 
 ## 3.2 Preprocessing Images
 
@@ -335,9 +239,9 @@ There are three types of color space for image representation.
 
 ![](examples/color_space.png)
 
-Please keep in mind that **training images are loaded in BGR colorspace using cv2** while `drive.py` **load images in RGB** to predict the steering angles.
+Please keep in mind that **the colorspace of training images loaded by cv2 is BGR**.  However, when the trained network predicts the steering angles at the testing stage,  `drive.py` **loads images with RGB** colorspace. 
 
-Therefore, in the training stage, we will convert the BGR colorspace loaded by OpenCV to RGB before feeding the real image into the training network to ensure the consistency of the colorspace between the training stage and testing satge.
+Therefore, in the training stage, we will convert the BGR image loaded by OpenCV to RGB before feeding the real image into the training network to ensure the consistency of the colorspace between the training stage and testing satge.
 
 
 
@@ -381,11 +285,9 @@ I crop the unnecessary portions of the image (background of sky, trees, mountain
 
 ### 3.2.3 Image Resizing
 
-The cropped image is then resized to **(128, 128)** for input into the model.  I found that resizing the images **decreased training time** with no effect on accuracy.
+> The cropped image is then resized to **(128, 128)** for input into the model.  I found that resizing the images **decreased training time** with no effect on accuracy.
 
-(update my image)
 
-![preprocessing](/media/ubuntu16/%E6%96%B0%E5%8A%A0%E5%8D%B7/Self-Driving/github%E9%A1%B9%E7%9B%AE/CarND-Behavioral-Cloning-master/writeup_images/preprocessing.png)
 
 ### 3.2.4 Data Augmentation
 
@@ -439,11 +341,9 @@ See the functions `random_blur()`, `random_brightness()`, and `random_shadow()` 
 
 Visualization of data augmentation can be found in the Jupyter notebooks `Random_Brightness.ipynb` and `Random_Shadow.ipynb`.
 
-![Augmenting](/media/ubuntu16/%E6%96%B0%E5%8A%A0%E5%8D%B7/Self-Driving/github%E9%A1%B9%E7%9B%AE/CarND-Behavioral-Cloning-master/writeup_images/augmenting.png)
 
 
-
-### 3.2.5 Data Set Distribution
+### 3.2.5 Data Set Distribution (important)
 
 One improvement that was found to be particularly effective was to fix the poor distribution of the data.  A disproportionate number of steering angles in the data set are at or near zero.  To correct this:
 
@@ -517,62 +417,144 @@ The input layer is divided into three sets of units: two "retinas" and a single 
 
 ### 4.1.5 My Implementation
 
-I tried a fully connected neural network with one hidden layer (100 units). The loss is decreased while training. However, the output steering angles mostly are 0 during the testing stage even though after I fixed distribution of the data set.
+I tried a fully connected neural network with one hidden layer (100 units). 
+
+1. At first, the normalization layer is not used in this model. The mae loss of the network is decreased to 2 after 10 epochs of training (the mse loss is about 40). However, the predicted steering angles are very large (30~40) resulting in that the car drives out of the track.
+
+   - Then I tried to increase training epochs. The network is overfitting after two epochs. The predicted steering angles are always 0 while testing.
+
+     ```bash
+     26/26 [==============================] - 14s 535ms/step - loss: 19800409148.0153 - mean_absolute_error: 32473.1974 - val_loss: 0.0982 - val_mean_absolute_error: 0.1770
+     Epoch 2/20
+     26/26 [==============================] - 12s 476ms/step - loss: 0.7308 - mean_absolute_error: 0.6258 - val_loss: 0.0474 - val_mean_absolute_error: 0.1611
+     Epoch 3/20
+     26/26 [==============================] - 12s 463ms/step - loss: 0.7908 - mean_absolute_error: 0.6371 - val_loss: 0.1805 - val_mean_absolute_error: 0.1857
+     Epoch 4/20
+     26/26 [==============================] - 12s 462ms/step - loss: 0.7838 - mean_absolute_error: 0.6326 - val_loss: 0.1070 - val_mean_absolute_error: 0.1681
+     ```
+
+   - Then I trained the network again without any parameter adjustment. The training process is normal and the final loss seems reasonable to drive the car autonomously. However, the testing result is bad.
+
+     ```bash
+     Epoch 18/20
+     26/26 [==============================] - 11s 425ms/step - loss: 14.6867 - mean_absolute_error: 1.9901 - val_loss: 18.6636 - val_mean_absolute_error: 2.0213
+     Epoch 19/20
+     26/26 [==============================] - 11s 405ms/step - loss: 12.8644 - mean_absolute_error: 1.8743 - val_loss: 20.7690 - val_mean_absolute_error: 2.0935
+     Epoch 20/20
+     26/26 [==============================] - 10s 404ms/step - loss: 13.1995 - mean_absolute_error: 1.8457 - val_loss: 18.0473 - val_mean_absolute_error: 1.9630
+     ```
+
+2.  After above attempts, A normalization layer was added to the network.  The mse loss decreased to 8.8145 and the mae loss decreased to 1.9536. It is worth noting that the mae loss almost no longer reduced after 10 training epochs. Finally, the car can drive at the straight track but the steering angle is still too large at the turn of the track. 
+
+   - The parameter file is saved as `fcnet-normalize.h5`
+
+   ```bash
+   Epoch 19/20
+   26/26 [==============================] - 13s 500ms/step - loss: 8.8145 - mean_absolute_error: 1.8013 - val_loss: 18.5598 - val_mean_absolute_error: 1.9536
+   Epoch 20/20
+   26/26 [==============================] - 13s 482ms/step - loss: 8.5064 - mean_absolute_error: 1.7278 - val_loss: 21.0641 - val_mean_absolute_error: 2.0854
+   ```
+
+   - Then i trained again with the same setup, The result seems very similar to the last traing. However, the initial predicted steering angle is too large to drive the car out of the track.
+
+   ```bash
+   Epoch 15/20
+   27/27 [==============================] - 12s 450ms/step - loss: 5.1247 - mean_absolute_error: 1.3832 - val_loss: 15.7272 - val_mean_absolute_error: 1.6583
+   Epoch 16/20
+   27/27 [==============================] - 12s 454ms/step - loss: 3.6974 - mean_absolute_error: 1.2955 - val_loss: 20.2050 - val_mean_absolute_error: 1.7890
+   Epoch 17/20
+   27/27 [==============================] - 12s 437ms/step - loss: 3.8141 - mean_absolute_error: 1.2731 - val_loss: 19.6754 - val_mean_absolute_error: 1.6569
+   Epoch 18/20
+   27/27 [==============================] - 12s 449ms/step - loss: 3.5270 - mean_absolute_error: 1.2395 - val_loss: 16.8144 - val_mean_absolute_error: 1.7448
+   Epoch 19/20
+   27/27 [==============================] - 12s 440ms/step - loss: 3.2822 - mean_absolute_error: 1.1961 - val_loss: 20.4352 - val_mean_absolute_error: 1.6591
+   Epoch 20/20
+   27/27 [==============================] - 12s 437ms/step - loss: 4.2537 - mean_absolute_error: 1.1959 - val_loss: 13.9532 - val_mean_absolute_error: 1.5473
+   
+   ```
+
+   - May be I should collect more images to improve the robustness of the network.
+
+3. Based on the above setup, the hidden layer units are increased to 1000 from 100. But the network converge more slowly and the final results is not good at all. The predicted steering angles is about 7.
+
+
+
+
 
 ```bash
 Reading data from csv file...
 Reading is done.
-EPOCHS: 10
-Training Set Size: 3451
-Valization Set Size: 863
+EPOCHS: 20
+Training Set Size: 6698
+Valization Set Size: 1675
 Batch Size: 256
 /home/ubuntu16/Behavioral_Cloning/data.py:102: RuntimeWarning: divide by zero encountered in true_divide
   copy_times = np.float32((desired_per_bin-hist)/hist)
-Training set size now: 3300
+Training set size now: 6408
 Using TensorFlow backend.
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
-cropping2d_1 (Cropping2D)    (None, 65, 320, 3)        0         
+cropping2d_1 (Cropping2D)    (None, 90, 320, 3)        0         
 _________________________________________________________________
-flatten_1 (Flatten)          (None, 62400)             0         
+lambda_1 (Lambda)            (None, 90, 320, 3)        0         
 _________________________________________________________________
-dense_1 (Dense)              (None, 100)               6240100   
+flatten_1 (Flatten)          (None, 86400)             0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 100)               8640100   
 _________________________________________________________________
 dense_2 (Dense)              (None, 1)                 101       
 =================================================================
-Total params: 6,240,201
-Trainable params: 6,240,201
+Total params: 8,640,201
+Trainable params: 8,640,201
 Non-trainable params: 0
 _________________________________________________________________
-Training with 13 training steps, 4 validation steps.
-Epoch 1/10
-2019-03-18 23:13:12.027618: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2019-03-18 23:13:12.034550: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_UNKNOWN: unknown error
-2019-03-18 23:13:12.034586: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: ubuntu16
-2019-03-18 23:13:12.034595: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: ubuntu16
-2019-03-18 23:13:12.034640: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:194] libcuda reported version is: 384.130.0
-2019-03-18 23:13:12.034666: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:198] kernel reported version is: 384.130.0
-2019-03-18 23:13:12.034675: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:305] kernel version seems to match DSO: 384.130.0
-13/13 [==============================] - 7s 508ms/step - loss: 401.1512 - mean_absolute_error: 5.0288 - val_loss: 0.0400 - val_mean_absolute_error: 0.1528
-Epoch 2/10
-13/13 [==============================] - 6s 461ms/step - loss: 0.4054 - mean_absolute_error: 0.5425 - val_loss: 0.0477 - val_mean_absolute_error: 0.1667
-Epoch 3/10
-13/13 [==============================] - 6s 466ms/step - loss: 0.4084 - mean_absolute_error: 0.5424 - val_loss: 0.0377 - val_mean_absolute_error: 0.1480
-Epoch 4/10
-13/13 [==============================] - 6s 469ms/step - loss: 0.4128 - mean_absolute_error: 0.5453 - val_loss: 0.0467 - val_mean_absolute_error: 0.1633
-Epoch 5/10
-13/13 [==============================] - 6s 482ms/step - loss: 0.4126 - mean_absolute_error: 0.5477 - val_loss: 0.0412 - val_mean_absolute_error: 0.1572
-Epoch 6/10
-13/13 [==============================] - 6s 480ms/step - loss: 0.4038 - mean_absolute_error: 0.5398 - val_loss: 0.0442 - val_mean_absolute_error: 0.1579
-Epoch 7/10
-13/13 [==============================] - 6s 475ms/step - loss: 0.4143 - mean_absolute_error: 0.5481 - val_loss: 0.0462 - val_mean_absolute_error: 0.1630
-Epoch 8/10
-13/13 [==============================] - 6s 468ms/step - loss: 0.4159 - mean_absolute_error: 0.5476 - val_loss: 0.0398 - val_mean_absolute_error: 0.1517
-Epoch 9/10
-13/13 [==============================] - 6s 476ms/step - loss: 0.4160 - mean_absolute_error: 0.5482 - val_loss: 0.0469 - val_mean_absolute_error: 0.1622
-Epoch 10/10
-13/13 [==============================] - 6s 466ms/step - loss: 0.4085 - mean_absolute_error: 0.5454 - val_loss: 0.0412 - val_mean_absolute_error: 0.1538
+Training with 26 training steps, 7 validation steps.
+Epoch 1/20
+2019-03-22 15:01:04.600396: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-03-22 15:01:04.609296: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_UNKNOWN: unknown error
+2019-03-22 15:01:04.609332: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: ubuntu16
+2019-03-22 15:01:04.609339: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: ubuntu16
+2019-03-22 15:01:04.609422: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:194] libcuda reported version is: 384.130.0
+2019-03-22 15:01:04.609447: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:198] kernel reported version is: 384.130.0
+2019-03-22 15:01:04.609454: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:305] kernel version seems to match DSO: 384.130.0
+26/26 [==============================] - 17s 658ms/step - loss: 28363.9075 - mean_absolute_error: 53.9200 - val_loss: 544.2633 - val_mean_absolute_error: 13.0249
+Epoch 2/20
+26/26 [==============================] - 13s 513ms/step - loss: 183.8346 - mean_absolute_error: 8.4544 - val_loss: 198.6990 - val_mean_absolute_error: 6.8564
+Epoch 3/20
+26/26 [==============================] - 13s 504ms/step - loss: 85.4518 - mean_absolute_error: 5.6811 - val_loss: 121.5147 - val_mean_absolute_error: 5.3753
+Epoch 4/20
+26/26 [==============================] - 13s 490ms/step - loss: 53.9227 - mean_absolute_error: 4.6156 - val_loss: 78.3456 - val_mean_absolute_error: 4.1882
+Epoch 5/20
+26/26 [==============================] - 13s 485ms/step - loss: 40.1116 - mean_absolute_error: 4.0480 - val_loss: 60.1448 - val_mean_absolute_error: 3.6841
+Epoch 6/20
+26/26 [==============================] - 12s 467ms/step - loss: 33.4601 - mean_absolute_error: 3.6159 - val_loss: 50.3771 - val_mean_absolute_error: 3.2018
+Epoch 7/20
+26/26 [==============================] - 12s 477ms/step - loss: 27.5612 - mean_absolute_error: 3.2153 - val_loss: 50.1070 - val_mean_absolute_error: 3.3396
+Epoch 8/20
+26/26 [==============================] - 13s 486ms/step - loss: 25.2034 - mean_absolute_error: 3.0763 - val_loss: 42.6331 - val_mean_absolute_error: 3.0705
+Epoch 9/20
+26/26 [==============================] - 12s 471ms/step - loss: 21.7526 - mean_absolute_error: 2.8231 - val_loss: 28.8875 - val_mean_absolute_error: 2.5984
+Epoch 10/20
+26/26 [==============================] - 12s 479ms/step - loss: 21.5543 - mean_absolute_error: 2.6685 - val_loss: 31.2045 - val_mean_absolute_error: 2.7697
+Epoch 11/20
+26/26 [==============================] - 12s 473ms/step - loss: 21.3720 - mean_absolute_error: 2.5300 - val_loss: 29.5707 - val_mean_absolute_error: 2.5382
+Epoch 12/20
+26/26 [==============================] - 13s 485ms/step - loss: 22.0472 - mean_absolute_error: 2.4291 - val_loss: 22.7521 - val_mean_absolute_error: 2.3247
+Epoch 13/20
+26/26 [==============================] - 13s 491ms/step - loss: 11.8152 - mean_absolute_error: 2.2145 - val_loss: 34.4226 - val_mean_absolute_error: 2.5353
+Epoch 14/20
+26/26 [==============================] - 13s 498ms/step - loss: 11.3611 - mean_absolute_error: 2.0897 - val_loss: 28.6361 - val_mean_absolute_error: 2.3918
+Epoch 15/20
+26/26 [==============================] - 13s 494ms/step - loss: 10.0865 - mean_absolute_error: 2.0311 - val_loss: 29.8321 - val_mean_absolute_error: 2.4249
+Epoch 16/20
+26/26 [==============================] - 12s 481ms/step - loss: 11.0298 - mean_absolute_error: 1.9461 - val_loss: 27.7828 - val_mean_absolute_error: 2.3180
+Epoch 17/20
+26/26 [==============================] - 12s 479ms/step - loss: 9.1520 - mean_absolute_error: 1.8593 - val_loss: 25.8675 - val_mean_absolute_error: 2.3493
+Epoch 18/20
+26/26 [==============================] - 13s 489ms/step - loss: 8.8702 - mean_absolute_error: 1.8245 - val_loss: 22.5005 - val_mean_absolute_error: 2.0931
+
+
 ```
 
 
@@ -628,6 +610,12 @@ Training data was collected by driving on a wide variety of roads and in a diver
 3. The first layer of the network performs image normalization. The normalizer is hard-coded and is not adjusted in the learning process. Performing normalization in the network allows the normalization scheme to be altered with the network architecture and to be accelerated via GPU processing.
 
 4. We use strided convolutions in the first three convolutional layers with a 2×2 stride and a 5×5 kernel and **a non-strided convolution (1 stride)** with a 3×3 kernel size in the last two convolutional layers. 
+
+
+
+显示normalizeion 之后的照片
+
+显示YUV 照片
 
 ### 4.2.5 Training Details
 

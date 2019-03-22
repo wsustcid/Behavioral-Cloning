@@ -41,16 +41,15 @@ if __name__ == "__main__":
     train_generator = data.get_generator(training_set, BATCH_SIZE)
     valid_generator = data.get_generator(validation_set, BATCH_SIZE)
 
+##-- FCNet --##
+    model = FCNet()
+
+    ##-- PilotNet --##
+    #model = PilotNet()
 
     ##-- Modified Nvidia Network --##
     #model = Modified_Nvidia_Netwrok()
-
-    ##-- FCNet --##
-    #model = FCNet()
-
-    ##-- PilotNet --##
-    model = PilotNet()
-
+    
     ##
     training_steps = math.ceil(len(training_set)/BATCH_SIZE)
     validation_steps = math.ceil(len(validation_set)/BATCH_SIZE)
