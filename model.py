@@ -134,8 +134,10 @@ class Modified_Nvidia_Netwrok:
 
         self.model = Sequential()
 
+        self.model.add(Cropping2D(cropping=((50,20),(0,0)), input_shape=(160, 320, 3)))
+
         # Normalization: converts the input from uint8 to float between -1 and 1
-        self.model.add(Lambda(lambda x: (x / 127.5) - 1., input_shape=(160, 320, 3)))
+        self.model.add(Lambda(lambda x: (x / 127.5) - 1.0))
 
         # Conv1
         self.model.add(Conv2D(24, kernel_size=(5,5), padding='valid', activation='relu'))
@@ -181,7 +183,7 @@ class Modified_Nvidia_Netwrok:
 
         
         ## Optimizer
-        optimizer = optimizers.Adam(lr = 0.001)
+        optimizer = optimizers.Adam()
 
         ## Compile
         self.model.compile(loss='mse', optimizer=optimizer, metrics=['mae'])

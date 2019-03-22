@@ -479,86 +479,6 @@ I tried a fully connected neural network with one hidden layer (100 units).
 
 
 
-
-
-```bash
-Reading data from csv file...
-Reading is done.
-EPOCHS: 20
-Training Set Size: 6698
-Valization Set Size: 1675
-Batch Size: 256
-/home/ubuntu16/Behavioral_Cloning/data.py:102: RuntimeWarning: divide by zero encountered in true_divide
-  copy_times = np.float32((desired_per_bin-hist)/hist)
-Training set size now: 6408
-Using TensorFlow backend.
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-cropping2d_1 (Cropping2D)    (None, 90, 320, 3)        0         
-_________________________________________________________________
-lambda_1 (Lambda)            (None, 90, 320, 3)        0         
-_________________________________________________________________
-flatten_1 (Flatten)          (None, 86400)             0         
-_________________________________________________________________
-dense_1 (Dense)              (None, 100)               8640100   
-_________________________________________________________________
-dense_2 (Dense)              (None, 1)                 101       
-=================================================================
-Total params: 8,640,201
-Trainable params: 8,640,201
-Non-trainable params: 0
-_________________________________________________________________
-Training with 26 training steps, 7 validation steps.
-Epoch 1/20
-2019-03-22 15:01:04.600396: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2019-03-22 15:01:04.609296: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_UNKNOWN: unknown error
-2019-03-22 15:01:04.609332: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: ubuntu16
-2019-03-22 15:01:04.609339: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: ubuntu16
-2019-03-22 15:01:04.609422: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:194] libcuda reported version is: 384.130.0
-2019-03-22 15:01:04.609447: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:198] kernel reported version is: 384.130.0
-2019-03-22 15:01:04.609454: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:305] kernel version seems to match DSO: 384.130.0
-26/26 [==============================] - 17s 658ms/step - loss: 28363.9075 - mean_absolute_error: 53.9200 - val_loss: 544.2633 - val_mean_absolute_error: 13.0249
-Epoch 2/20
-26/26 [==============================] - 13s 513ms/step - loss: 183.8346 - mean_absolute_error: 8.4544 - val_loss: 198.6990 - val_mean_absolute_error: 6.8564
-Epoch 3/20
-26/26 [==============================] - 13s 504ms/step - loss: 85.4518 - mean_absolute_error: 5.6811 - val_loss: 121.5147 - val_mean_absolute_error: 5.3753
-Epoch 4/20
-26/26 [==============================] - 13s 490ms/step - loss: 53.9227 - mean_absolute_error: 4.6156 - val_loss: 78.3456 - val_mean_absolute_error: 4.1882
-Epoch 5/20
-26/26 [==============================] - 13s 485ms/step - loss: 40.1116 - mean_absolute_error: 4.0480 - val_loss: 60.1448 - val_mean_absolute_error: 3.6841
-Epoch 6/20
-26/26 [==============================] - 12s 467ms/step - loss: 33.4601 - mean_absolute_error: 3.6159 - val_loss: 50.3771 - val_mean_absolute_error: 3.2018
-Epoch 7/20
-26/26 [==============================] - 12s 477ms/step - loss: 27.5612 - mean_absolute_error: 3.2153 - val_loss: 50.1070 - val_mean_absolute_error: 3.3396
-Epoch 8/20
-26/26 [==============================] - 13s 486ms/step - loss: 25.2034 - mean_absolute_error: 3.0763 - val_loss: 42.6331 - val_mean_absolute_error: 3.0705
-Epoch 9/20
-26/26 [==============================] - 12s 471ms/step - loss: 21.7526 - mean_absolute_error: 2.8231 - val_loss: 28.8875 - val_mean_absolute_error: 2.5984
-Epoch 10/20
-26/26 [==============================] - 12s 479ms/step - loss: 21.5543 - mean_absolute_error: 2.6685 - val_loss: 31.2045 - val_mean_absolute_error: 2.7697
-Epoch 11/20
-26/26 [==============================] - 12s 473ms/step - loss: 21.3720 - mean_absolute_error: 2.5300 - val_loss: 29.5707 - val_mean_absolute_error: 2.5382
-Epoch 12/20
-26/26 [==============================] - 13s 485ms/step - loss: 22.0472 - mean_absolute_error: 2.4291 - val_loss: 22.7521 - val_mean_absolute_error: 2.3247
-Epoch 13/20
-26/26 [==============================] - 13s 491ms/step - loss: 11.8152 - mean_absolute_error: 2.2145 - val_loss: 34.4226 - val_mean_absolute_error: 2.5353
-Epoch 14/20
-26/26 [==============================] - 13s 498ms/step - loss: 11.3611 - mean_absolute_error: 2.0897 - val_loss: 28.6361 - val_mean_absolute_error: 2.3918
-Epoch 15/20
-26/26 [==============================] - 13s 494ms/step - loss: 10.0865 - mean_absolute_error: 2.0311 - val_loss: 29.8321 - val_mean_absolute_error: 2.4249
-Epoch 16/20
-26/26 [==============================] - 12s 481ms/step - loss: 11.0298 - mean_absolute_error: 1.9461 - val_loss: 27.7828 - val_mean_absolute_error: 2.3180
-Epoch 17/20
-26/26 [==============================] - 12s 479ms/step - loss: 9.1520 - mean_absolute_error: 1.8593 - val_loss: 25.8675 - val_mean_absolute_error: 2.3493
-Epoch 18/20
-26/26 [==============================] - 13s 489ms/step - loss: 8.8702 - mean_absolute_error: 1.8245 - val_loss: 22.5005 - val_mean_absolute_error: 2.0931
-
-
-```
-
-
-
 ## 4.2 NVIDIA pilotNet [2]
 
 [3] Bojarski, M.. (2016). **End to End Learning for Self-Driving Cars**, 1–9. https://doi.org/10.2307/2529309
@@ -659,12 +579,9 @@ References
 
 
 
-### 4.2.9 Training Process
+### 4.2.9 My Implementation
 
-1. Two laps of track images can not make the network converge
-2. Fixing data distribution can decrease the mse of the predictions at first two epochs. But the mse will not decrease significantly by increasing the number of epochs.
-
-
+1. The model and training process are listed below. The final trained model is very well. All the saved model (even the model saved after 1 epoch)  can keep the car drving along the center line of the track for the full lap without any fails. The desired velocity of the car can be set arbitrary from 0 to 30.
 
 ```bash
 Reading data from csv file...
@@ -712,17 +629,6 @@ Non-trainable params: 0
 _________________________________________________________________
 Training with 24 steps, 7 validation steps.
 Epoch 1/20
-2019-03-19 18:20:55.078545: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2019-03-19 18:20:55.173613: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:964] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2019-03-19 18:20:55.173986: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
-name: GeForce GTX 1080 major: 6 minor: 1 memoryClockRate(GHz): 1.8095
-pciBusID: 0000:01:00.0
-totalMemory: 7.92GiB freeMemory: 7.24GiB
-2019-03-19 18:20:55.174015: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
-2019-03-19 18:20:55.375570: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
-2019-03-19 18:20:55.375612: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
-2019-03-19 18:20:55.375633: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
-2019-03-19 18:20:55.375798: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 6985 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080, pci bus id: 0000:01:00.0, compute capability: 6.1)
 24/24 [==============================] - 11s 438ms/step - loss: 0.2917 - mean_absolute_error: 0.4121 - val_loss: 0.0490 - val_mean_absolute_error: 0.1765
 Epoch 2/20
 24/24 [==============================] - 9s 395ms/step - loss: 0.0581 - mean_absolute_error: 0.1890 - val_loss: 0.0403 - val_mean_absolute_error: 0.1485
@@ -740,7 +646,7 @@ Epoch 8/20
 24/24 [==============================] - 10s 406ms/step - loss: 0.0139 - mean_absolute_error: 0.0891 - val_loss: 0.0252 - val_mean_absolute_error: 0.1230
 Epoch 9/20
 24/24 [==============================] - 10s 407ms/step - loss: 0.0130 - mean_absolute_error: 0.0862 - val_loss: 0.0239 - val_mean_absolute_error: 0.1229
-Epoch 10/20
+Epoch 10/20    (saved)
 24/24 [==============================] - 10s 404ms/step - loss: 0.0114 - mean_absolute_error: 0.0803 - val_loss: 0.0201 - val_mean_absolute_error: 0.1115
 Epoch 11/20
 24/24 [==============================] - 10s 409ms/step - loss: 0.0104 - mean_absolute_error: 0.0764 - val_loss: 0.0229 - val_mean_absolute_error: 0.1213
@@ -768,7 +674,12 @@ Epoch 20/20
 
 ## 4.3 Modified NVIDIA Network
 
-The empirical process of finding the correct neural network can be a lesson in frustration.  I started with LeNet [1] and tried countless modifications.  Feeling the need for something slightly more powerful to increase nonlinearity and work for both tracks I moved on to a modified NVIDIA architecture[2].  Image data is preprocessed as described above before being normalized in the first layer.  The network consists of 5 Convolutional layers with max pooling and 5 fully connected layers.  Dropout layers were used in between the fully connected layers to reduce overfitting.  An Adam optimizer was used with a learning rate of 1e-4. Code for the model can be found in `model_definition.py`
+Overall, The modified nvidia network is very similar to the original one.  
+
+- In this version, all the strides of filters are set to be 1. The corresponding max pooling operation is added after the first three convolution layers to ensure the output is consistent with the original network.
+- Dropout layers were used in between the fully connected layers to reduce overfitting.  
+
+The final performance of the trained network is almost the same as the original one.
 
 The final network is as follows:
 
@@ -794,6 +705,49 @@ The final network is as follows:
 
 ### Training
 
+```bash
+25/25 [==============================] - 13s 503ms/step - loss: 0.2863 - mean_absolute_error: 0.4376 - val_loss: 0.1224 - val_mean_absolute_error: 0.2843
+Epoch 2/20
+25/25 [==============================] - 10s 417ms/step - loss: 0.0728 - mean_absolute_error: 0.2170 - val_loss: 0.0419 - val_mean_absolute_error: 0.1532
+Epoch 3/20
+25/25 [==============================] - 11s 429ms/step - loss: 0.0437 - mean_absolute_error: 0.1646 - val_loss: 0.0278 - val_mean_absolute_error: 0.1239
+Epoch 4/20
+25/25 [==============================] - 10s 416ms/step - loss: 0.0368 - mean_absolute_error: 0.1506 - val_loss: 0.0297 - val_mean_absolute_error: 0.1264
+Epoch 5/20
+25/25 [==============================] - 10s 414ms/step - loss: 0.0327 - mean_absolute_error: 0.1429 - val_loss: 0.0325 - val_mean_absolute_error: 0.1338
+Epoch 6/20
+25/25 [==============================] - 10s 411ms/step - loss: 0.0302 - mean_absolute_error: 0.1376 - val_loss: 0.0253 - val_mean_absolute_error: 0.1191
+Epoch 7/20
+25/25 [==============================] - 11s 447ms/step - loss: 0.0284 - mean_absolute_error: 0.1322 - val_loss: 0.0267 - val_mean_absolute_error: 0.1253
+Epoch 8/20
+25/25 [==============================] - 10s 408ms/step - loss: 0.0257 - mean_absolute_error: 0.1258 - val_loss: 0.0301 - val_mean_absolute_error: 0.1353
+Epoch 9/20
+25/25 [==============================] - 11s 422ms/step - loss: 0.0242 - mean_absolute_error: 0.1223 - val_loss: 0.0301 - val_mean_absolute_error: 0.1328
+Epoch 10/20
+25/25 [==============================] - 10s 410ms/step - loss: 0.0231 - mean_absolute_error: 0.1192 - val_loss: 0.0230 - val_mean_absolute_error: 0.1184
+Epoch 11/20
+25/25 [==============================] - 11s 423ms/step - loss: 0.0221 - mean_absolute_error: 0.1167 - val_loss: 0.0280 - val_mean_absolute_error: 0.1290
+Epoch 12/20
+25/25 [==============================] - 10s 418ms/step - loss: 0.0225 - mean_absolute_error: 0.1171 - val_loss: 0.0274 - val_mean_absolute_error: 0.1286
+Epoch 13/20
+25/25 [==============================] - 10s 410ms/step - loss: 0.0215 - mean_absolute_error: 0.1139 - val_loss: 0.0269 - val_mean_absolute_error: 0.1265
+Epoch 14/20
+25/25 [==============================] - 10s 408ms/step - loss: 0.0198 - mean_absolute_error: 0.1097 - val_loss: 0.0238 - val_mean_absolute_error: 0.1191
+Epoch 15/20
+25/25 [==============================] - 10s 418ms/step - loss: 0.0190 - mean_absolute_error: 0.1087 - val_loss: 0.0284 - val_mean_absolute_error: 0.1319
+Epoch 16/20
+25/25 [==============================] - 10s 417ms/step - loss: 0.0178 - mean_absolute_error: 0.1041 - val_loss: 0.0277 - val_mean_absolute_error: 0.1280
+Epoch 17/20
+25/25 [==============================] - 10s 419ms/step - loss: 0.0181 - mean_absolute_error: 0.1052 - val_loss: 0.0230 - val_mean_absolute_error: 0.1175
+Epoch 18/20
+25/25 [==============================] - 10s 409ms/step - loss: 0.0165 - mean_absolute_error: 0.1006 - val_loss: 0.0228 - val_mean_absolute_error: 0.1164
+Epoch 19/20
+25/25 [==============================] - 10s 411ms/step - loss: 0.0157 - mean_absolute_error: 0.0977 - val_loss: 0.0238 - val_mean_absolute_error: 0.1204
+Epoch 20/20
+25/25 [==============================] - 10s 415ms/step - loss: 0.0152 - mean_absolute_error: 0.0967 - val_loss: 0.0250 - val_mean_absolute_error: 0.1219
+
+```
+
 
 
 1. The trained network can drive the car across the full tack with 9 mph.
@@ -802,6 +756,12 @@ The final network is as follows:
 4. finall loss is 0.02 (后面几乎不再降低)
 
 ------
+
+
+
+
+
+
 
 Training the network is done using the python script `model.py`.  By default the script runs for 10 epochs although the script will take a different number of epochs as a parameter.  The script by default allocates 80% of the data set to training and 20% to validation sets.
 
