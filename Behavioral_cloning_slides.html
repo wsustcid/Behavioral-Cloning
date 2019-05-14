@@ -102,13 +102,12 @@ class: center, middle, main-title
 
 ---
 ### 1.1.1 Defination
-Behavioral cloning is a method by which human sub-cognitive skills can be captured and reproduced in a
-computer program. 
+Behavioral cloning is a method by which **human sub-cognitive skills can be captured and reproduced** in a computer program. 
 
 
-- As the human subject performs the skill, his or her actions are recorded along with the situation that gave rise to the action. 
+- As the human subject performs the skill, his or her **actions** are recorded along with the **situation** that gave rise to the action. 
 - A log of these records is used as input to a learning program. 
-- The learning program outputs a set of rules that reproduce the skilled behavior. 
+- The learning program outputs **a set of rules** that reproduce the skilled behavior. 
 
 This method can be used to construct automatic control systems for complex tasks for which classical control theory is inadequate. It can also be used for training.
 
@@ -116,9 +115,9 @@ This method can be used to construct automatic control systems for complex tasks
 ---
 ### 1.1.2 Motivation and Background
 Behavioral cloning (Michie, Bain, &amp; Hayes-Michie, 1990) is a form of **learning by imitation** whose main
-motivation is to build a model of the behavior of a human when performing a complex skill. 
+motivation is to **build a model of the behavior** of a human when performing a complex skill. 
 
-Experts might be defined as people who know what they are doing not what they are talking about. 
+**Experts** might be defined as people who know what they are doing not what they are talking about. 
 
 
 - That is, once a person becomes highly skilled in some task, the skill becomes sub-cognitive and is no longer available to introspection. So when the person is asked to explain why certain decisions were made, the explanation is a *post hoc* justification rather than a true explanation. 
@@ -132,7 +131,7 @@ Kuniyoshi, Inaba, &amp; Inoue, 1994; Pomerleau, 1989) and methods that use data 
 Behavioral cloning assumes that there is a plant of some kind that is under the control of a human operator. The plant may be a physical system or a simulation. 
 
 
-- In either case, the plant must be instrumented so that it is possible to capture the state of the system, including all the control settings. 
+- In either case, the plant must be **instrumented** so that it is possible to capture the state of the system, including all the control settings. 
 - Thus, whenever the operator performs an action, that is, changes a control setting, **we can associate that action with a particular state**.
 
 .center[&lt;img src=imgs/p0_1.png height=350px/&gt;]
@@ -142,7 +141,7 @@ Behavioral cloning assumes that there is a plant of some kind that is under the 
 Let us use a simple example of a system that has only one control action. 
 
 
-- A pole balancer has four state variables: the angle of the pole, $\theta$, and its angular velocity, $\dot{\theta}$and the position, $x$, and velocity $\dot{x}$, of the cart on the track. The only action available to the controller is to apply a fixed positive or negative force, $F$, to accelerate the cart left or right.
+- A pole balancer has **four state variables**: the angle of the pole, $\theta$, and its angular velocity, $\dot{\theta}$and the position, $x$, and velocity $\dot{x}$, of the cart on the track. The only action available to the controller is to apply a fixed positive or negative force, $F$, to accelerate the cart left or right.
 - Whenever a control action is performed, we record the action as well as values of the four state variables at the time of the action. **Each of these records can be viewed as an example of a mapping from state to action.**
 
 .center[&lt;img src=imgs/pole_balancer.gif /&gt;]
@@ -154,12 +153,12 @@ A controller such as the one described above is referred to as a ***direct contr
 
 **Limitations:** 
 
-Direct controllers work quite well for systems that have a relatively small state space. However, for complex systems, behavioral cloning of direct situation–action rules tends to produce very brittle controllers. That is, they cannot tolerate large disturbances. 
+Direct controllers work quite well for systems that have a relatively **small state space**. However, for complex systems, behavioral cloning of direct situation–action rules tends to produce very brittle controllers. That is, they **cannot tolerate large disturbances**. 
 
 
 - For example, when air turbulence is introduced into the flight simulator, the performance of the clone degrades very rapidly. This is because the examples provided by logging the performance of a human only cover a very small part of the state space of a complex system such as an aircraft in flight. Thus, the“expertise” of the controller is very limited. If the system strays outside the controller’s region of expertise, **it has no method for recovering and failure is usually catastrophic.**
 
-More robust control is possible but only with a significant change in approach. The more successful methods decompose the learning task into two stages: 
+More robust control is possible but only with a significant change in approach. The more successful methods decompose the learning task into **two stages**: 
 
 
 - learning goals 
@@ -374,9 +373,9 @@ class: center, middle, main-title
 ---
 ### 2.1.1 Introduction
 
-- ALVINN (Autonomous Land Vehicle In a Neural Network) is a 3-layer back-propagation network designed for the task of road following. 
-- Currently ALVINN takes images from a camera and a laser range finder as input and produces as output the direction the vehicle should travel in order to follow the road. 
-- Training has been conducted using simulated road images. 
+- ALVINN (Autonomous Land Vehicle In a Neural Network) is a **3-layer back-propagation network** designed for the task of **road following**. 
+- Currently ALVINN takes images from a **camera** and a **laser range finder** as input and produces as output the **direction** the vehicle should travel in order to follow the road. 
+- Training has been conducted using **simulated road images**. 
 - Successful tests on the Carnegie Mellon autonomous navigation test vehicle indicate that **the network can effectively follow real roads under certain field conditions**. 
 - The representation developed to perform the task differs dramatically when the network is trained under various conditions, suggesting the possibility of a novel adaptive autonomous navigation system capable of tailoring its processing to the conditions at hand.
  - *Autonomous navigation systems based on traditional image processing and pattern recognition techniques often perform well under certain conditions but have problems with others. Part of the difficulty stems from the fact that the processing performed by these systems remains fixed across various driving situations.*
@@ -386,29 +385,29 @@ class: center, middle, main-title
 ### 2.1.2 Network Architecture
 |   |   | 
 |--|--|
-|  1. The activation level of each unit in the video input retina is proportional to the intensity in the blue color band of the corresponding patch of the image. The blue band of the color image is used because it provides the highest contrast between the road and the non-road. <br><br> 2. The activation level of each unit in the range finder input retina is proportional to the proximity of the corresponding area in the image.<br> <br> 3. The road intensity feedback unit indicates **whether** the road is lighter or darker than the non-road **in the previous image.** |  &lt;img src=imgs/alvinn.png height=400px /&gt; | 
+|  1. The activation level of each unit in the video input retina is proportional to the intensity in the **blue color band** of the corresponding patch of the image. The blue band of the color image is used because it provides the **highest contrast** between the road and the non-road. <br><br> 2. The activation level of each unit in the range finder input retina is proportional to the **proximity** of the corresponding area in the image.<br> <br> 3. The road intensity feedback unit indicates **whether** the road is lighter or darker than the non-road in the previous image. |  &lt;img src=imgs/alvinn.png height=400px /&gt; | 
 
 
 ---
 **The output layer consists of 46 units, divided into two groups:**
 
 
-- The first set of 45 units is a linear representation of the turn curvature along which the vehicle should travel in order to head towards the road center. 
+- The first set of 45 units is **a linear representation of the turn curvature** along which the vehicle should travel in order to head towards the road center. 
 - The middle unit represents the &quot;travel straight ahead&quot; condition while units to the left and right of the center represent successively sharper left and right turns. 
-- The network is trained with a desired output vector of all zeros except for a &quot;hill&quot; of activation centered on the unit representing the correct **turn curvature**, which is the curvature which would bring the vehicle to the road center 7 meters ahead of its current position. 
+- The network is trained with a desired output vector of all zeros except for **a &quot;hill&quot; of activation** centered on the unit representing the correct turn curvature, which is the curvature which would bring the vehicle to the road center 7 meters ahead of its current position. 
  - More specifically, the desired activation levels for the nine units centered around the correct turn curvature unit are:
 ```
   0.10, 0.32, 0.61, 0.89, 1.00, 0.89, 0.61, 0.32 0.10
 ```
- - During testing, the turn curvature dictated by the network is taken to be the curvature represented by the output unit with the highest activation level.
+ - During testing, the turn curvature dictated by the network is taken to be the curvature represented by the output unit with the **highest activation level**.
 
 
 ---
-The final output unit is a road intensity feedback unit which indicates whether the road is lighter or darker than the non-road **in the current image**. 
+The final output unit is a road intensity feedback unit which indicates whether the road is lighter or darker than the non-road in the current image. 
 
 
 - During testing, the activation of the output road intensity feedback unit is recirculated to the input layer in the style of Jordan [Jordan, 1988] to aid the network&#39;s processing by providing rudimentary information concerning the relative intensities of the road and the non-road in the previous image.
-- Using this extra information concerning the relative brightness of the road and the non-road, the network is better able to determine the correct direction for the vehicle to travel.
+- Using this extra information concerning the **relative brightness of the road and the non-road**, the network **is better able to determine the correct direction** for the vehicle to travel.
 
 
 ---
@@ -416,17 +415,17 @@ The final output unit is a road intensity feedback unit which indicates whether 
 **Limitations:**
 
 
-- Training on actual road images is logistically difficult, because in order to develop a general representation, the network must be presented with a large number of training exemples depicting roads under a wide variety of conditions. 
-- Collection of such a data set would be difficult, and **changes in parameters such as camera orientation would require collecting an entirely new set of road images.**
+- Training on actual road images is logistically difficult, because in order to develop a general representation, the network must be presented with **a large number of training examples** depicting roads under a wide variety of conditions. 
+- Collection of such a data set would be difficult, and **changes in parameters** such as camera orientation would require collecting an entirely new set of road images.
 
 
 ---
 **Data Generator:**
 
 
-- To avoid these difficulties we have developed a simulated road generator which creates road images to be used as training exemplars for the network. 
+- To avoid these difficulties we have developed a **simulated road generator** which creates road images to be used as training exemplars for the network. 
 - Figure 2 depicts the video images of one real and one artificial road. Although not shown in Figure 2, the road generator also creates corresponding simulated range finder images. At the relatively low resolution being used it is difficult to distinguish between real and simulated roads.
-- In addition, the network must not solely be shown examples of accurate driving, but also how to recover (i.e. return to the road center) once a mistake has been made.
+- In addition, the network must not solely be shown examples of accurate driving, but also how to **recover** (i.e. return to the road center) once a mistake has been made.
 
 &lt;img src=imgs/p0_2.png height=300px/&gt;
 
@@ -435,23 +434,23 @@ The final output unit is a road intensity feedback unit which indicates whether 
 **Training:**
 
 
-- Training involves first creating a set of 1200 road snapshots depicting roads with a wide variety of retinal orientations and positions, under a variety of lighting conditions and with realistic noise levels.
-- After 40 epochs of training on the 1200 simulated road snapshots, the network correctly dictates a turn curvature within two units of the correct answer approximately 90% of the time on novel simulated road images.
-- Specifically, the network can accurately drive the NAVLAB at a speed of 1/2 meter per second along a 400 meter path through a wooded area of the CMU campus under sunny fall conditions.
+- Training involves first creating a set of **1200 road snapshots** depicting roads with a wide variety of retinal orientations and positions, under a variety of lighting conditions and with realistic noise levels.
+- After 40 epochs of training on the 1200 simulated road snapshots, the network correctly dictates a turn curvature **within two units of the correct answer** approximately 90% of the time on novel simulated road images.
+- Specifically, the network can accurately drive the NAVLAB at a speed of **1/2 meter** per second along a **400 meter** path through a **wooded area** of the CMU campus under sunny fall conditions.
 
 
 ---
 **Road intensity unit:**
 
 
-- During the early stages of training, the input road intensity unit is given a random activation level. This is done to prevent the network from merely learning to copy the activation level of the input road intensity unit to the output road intensity unit, since their activation levels should almost always be identical because the relative intensity of the road and the non-road does not often change between two successive images. 
+- During the early stages of training, the input road intensity unit is given a **random activation level**. This is done to prevent the network from merely learning to copy the activation level of the input road intensity unit to the output road intensity unit, since their activation levels should almost always be identical because the relative intensity of the road and the non-road does not often change between two successive images. 
 - Once the network has developed a representation that uses image characteristics to determine the activation level for the output road intensity unit, the network is given as input whether the road would have been darker or lighter than the non-road in the previous image. 
 - Using this extra information concerning the relative brightness of the road and the non-road, the network is better able to determine the correct direction for the vehicle to travel.
 
 
 ---
 ### 2.1.4 Network Representation
-The representation developed by the network to perform the road following task depends dramatically on the characteristics of the training set.
+The **representation** developed by the network to perform the road following task **depends** dramatically on the **characteristics of the training set**.
 
 
 - When trained on examples of roads with a fixed width:
@@ -471,9 +470,9 @@ The representation developed by the network to perform the road following task d
 **1. Why not use real images？**（试图建立规则，并令机器学习规则：好or不好?）
 
 
-- There are difficulties involved with training &quot;on-the-fly&quot; (不经过某种额外步骤而直接进行某项活动) with real images. 
+- There are difficulties involved with **training &quot;on-the-fly&quot;** (不经过某种额外步骤而直接进行某项活动) with real images. 
 - If the network is not presented with sufficient variability in its training exemplars to cover the conditions it is likely to encounter when it takes over driving from the human operator, **it will not develop a sufficiently robust representation and will perform poorly.** 
-- In addition, the network must not solely be shown examples of accurate driving, but also how to recover (i.e. return to the road center) once a mistake has been made. 
+- In addition, the network must not solely be shown examples of accurate driving, but also **how to recover** (i.e. return to the road center) once a mistake has been made. 
 - Partial initial training on **a variety of simulated road images** should help eliminate these difficulties and facilitate better performance.
 
 
@@ -481,13 +480,15 @@ The representation developed by the network to perform the road following task d
 **2. Is it necessary to use laser range finder?**
 
 
-- Range data is in some sense less important for the task of road following than is the video data. 
- - The range data contains information concerning the position of obstacles in the scene, but nothing explicit about the location of the road. 
- - As a result, the range data is given less significance in the representation, as is illustrated by the relatively small magnitude weights from the range finder retina in the weight diagrams. 
-- Figures 4 and 5 illustrate that the range finder connections do correlate with the connections from the video camera, and do contribute to choosing the correct travel direction. 
- - Specifically, in both figures, obstacles located outside the area in which the hidden unit expects the road to be located increase the hidden unit&#39;s activation level while obstacles located within the expected road boundaries inhibit the hidden unit. 
-- However the contributions from the range finger connections aren&#39;t necessary for reasonable performance. When ALVINN was tested with normal video input but an obstacle-free range finder image as constant input, there was no noticeable degradation in driving performance. 
-- Obviously under off-road driving conditions obstacle avoidance would become much more important and hence one would expect the range finder retina to play a much more significant role in the network&#39;s representation.
+- Range data is in some sense **less important for the task of road following** than is the video data. 
+ - The range data contains information concerning the **position of obstacles** in the scene, but nothing explicit about the location of the road. 
+ - As a result, the range data is given less significance in the representation, as is illustrated by the relatively **small magnitude weights** from the range finder retina in the weight diagrams. 
+- Figures 4 and 5 illustrate that the range finder connections do correlate with the connections from the video camera, and **do contribute to choosing the correct travel direction**. 
+ - Specifically, in both figures, obstacles located outside the area in which the hidden unit expects the road to be located **increase** the hidden unit&#39;s activation level 
+ - while obstacles located within the expected road boundaries **inhibit** the hidden unit. 
+- However the contributions from the range finger connections **aren&#39;t necessary for reasonable performance.** 
+ - When ALVINN was tested with normal video input but an **obstacle-free range finder** image as constant input, there was **no noticeable degradation** in driving performance. 
+- Obviously under **off-road driving conditions** obstacle avoidance would become much more important and hence one would expect the range finder retina to play a much more significant role in the network&#39;s representation.
 
 
 ---
@@ -495,8 +496,8 @@ The representation developed by the network to perform the road following task d
 
 
 1. Giving the network additional feedback information by using Elman&#39;s [Elman, 1988] technique of recirculating hidden activation levels.
-1. Adding a second hidden layer to facilitate better internal representations.
-1. Adding local connectivity to give the network a priori knowledge of the two dimensional nature of the input.
+1. Adding a second **hidden layer** to facilitate better internal representations.
+1. Adding local connectivity to give the network a priori knowledge of the **two dimensional nature** of the input.
 
 ---&gt; Deep CNN!
 
@@ -506,8 +507,8 @@ The representation developed by the network to perform the road following task d
 
 
 - Road forks and intersections. 
- - Currently upon reaching a fork, the network may output two widely discrepant travel directions, one for each choice. The result is often an oscillation in the dictated travel direction and hence inaccurate road following. 
-- Integrating a map into the system to enable global point-to-point path planning.
+ - Currently upon reaching a fork, the network may output **two widely discrepant travel directions**, one for each choice. The result is often an **oscillation** in the dictated travel direction and hence inaccurate road following. 
+- Integrating a map into the system to enable **global point-to-point path planning**.
 
 
 ---
@@ -522,8 +523,8 @@ PilotNet
 **Motivation:**
 
 
-- The primary motivation for this work is to avoid the need to recognize specific human-designated features, such as lane markings, guard rails, or other cars, 
-- and to avoid having to create a collection of “if, then, else” rules, based on observation of these features.
+- The primary motivation for this work is to **avoid the need to recognize specific human-designated features**, such as lane markings, guard rails, or other cars, 
+- and to avoid having to create a collection of **“if, then, else”** rules, based on observation of these features.
 
 &lt;img src=imgs/nvidia.png /&gt;
 
@@ -534,8 +535,8 @@ We trained a convolutional neural network (CNN) to **map raw pixels from a singl
 
 - Compared to explicit decomposition of the problem, such as lane marking detection, path planning, and control, our **end-to-end** system **optimizes all processing steps simultaneously**. 
 - We argue that this will eventually lead to better performance and smaller systems. 
- - Better performance will result because the internal components self-optimize to maximize overall system performance, instead of optimizing human-selected intermediate criteria, e. g., lane detection. *Such criteria understandably are selected for ease of human interpretation which doesn’t automatically guarantee maximum system performance.* 
- - Smaller networks are possible because the system learns to solve the problem with the minimal number of processing steps. 
+ - Better performance will result because the internal components **self-optimize to maximize overall system performance**, instead of optimizing human-selected intermediate criteria, e. g., lane detection. *Such criteria understandably are selected for ease of human interpretation which doesn’t automatically guarantee maximum system performance.* 
+ - **Smaller networks** are possible because the system learns to solve the problem with the minimal number of processing steps. 
 
 
 ---
@@ -555,9 +556,14 @@ We trained a convolutional neural network (CNN) to **map raw pixels from a singl
 .center[&lt;img src=imgs/p1_2.png height=300px /&gt;]
 
 
+---
+
 1. Training with data from only the human driver is not sufficient. **The network must learn how to recover from mistakes.** Otherwise the car will slowly drift off the road. 
  - **The training data is therefore augmented with additional images that show the car in different shifts from the center of the lane and rotations from the direction of the road.**
-1. Additional shifts between the cameras and all rotations are simulated by viewpoint transformation of the image from the nearest camera. Precise viewpoint transformation requires 3D scene knowledge which we don’t have. We therefore approximate the transformation by assuming all points below the horizon are on flat ground and all points above the horizon are infinitely far away. This works fine for flat terrain but it introduces distortions for objects that stick above the ground, such as cars, poles, trees, and buildings. Fortunately these distortions don’t pose a big problem for network training. The steering label for transformed images is adjusted to one that would steer the vehicle back to the desired location and orientation in two seconds.
+1. Additional shifts between the cameras and all rotations are simulated by **viewpoint transformation** of the image from the nearest camera. 
+ - Precise viewpoint transformation requires 3D scene knowledge which we don’t have. We therefore approximate the transformation by assuming all points below the horizon are on flat ground and all points above the horizon are infinitely far away. 
+ - This works fine for flat terrain but it introduces distortions for objects that stick above the ground, such as cars, poles, trees, and buildings. Fortunately these distortions don’t pose a big problem for network training. 
+ - The steering label for transformed images is adjusted to one that would steer the vehicle back to the desired location and orientation in two seconds.
 
 
 ---
@@ -570,7 +576,7 @@ Training data was collected by driving on a wide variety of roads and in a diver
  - two-lane roads (with and without lane markings), 
  - residential roads with parked cars, tunnels, and unpaved roads. 
 - Data was collected in clear, cloudy, foggy, snowy, and rainy weather, both day and night. In some instances, the sun was low in the sky, resulting in glare reflecting from the road surface and scattering from the windshield.
-- Drivers were encouraged to maintain full attentiveness, but otherwise drive as they usually do. As of March 28, 2016, about 72 hours of driving data was collected. (72x3600x10=2592000)
+- Drivers were encouraged to maintain full attentiveness, but otherwise **drive as they usually do**. As of March 28, 2016, about 72 hours of driving data was collected. (72x3600x10=2592000)
 
 
 ---
@@ -594,7 +600,7 @@ class: middle
 **Data Selection：**
 
 
-- Our collected data is labeled with road type, weather condition, and the driver’s activity (staying in a lane, switching lanes, turning, and so forth). 
+- Our collected data is labeled with **road type**, **weather condition**, and the **driver’s activity** (staying in a lane, switching lanes, turning, and so forth). 
 - To train a CNN to do lane following we only select data where the driver was staying in a lane and discard the rest. 
 - We then **sample that video at 10 FPS**. A higher sampling rate would result in including images that are highly similar and thus not provide much useful information.
 - To remove a bias towards driving straight the **training data includes a higher proportion of frames that represent road curves.**
@@ -619,7 +625,7 @@ class: middle
 We estimate what percentage of the time the network could drive the car (autonomy). 
 
 
-- The metric is determined by counting simulated human interventions (see Section 6). These interventions occur when the simulated vehicle departs from the center line by more than one meter.
+- The metric is determined by **counting simulated human interventions** (see Section 6). These interventions occur when the simulated vehicle departs from the center line by more than one meter.
 - We assume that in real life an actual intervention would require a total of six seconds: this is the time required for a human to retake control of the vehicle, re-center it, and then restart the self-steering mode.
 .center[&lt;img src=imgs/p1_metric.png /&gt;]
 
@@ -627,17 +633,17 @@ We estimate what percentage of the time the network could drive the car (autonom
 ---
 **Visualization of Internal CNN State:**
 
-Figures 7 and 8 show the activations of the first two feature map layers for two different example inputs, an unpaved road and a forest.
+Figures 7 and 8 show the activations of the **first two feature map layers** for two different example inputs, an unpaved road and a forest.
 
 &lt;img src=imgs/p1_7.png width=350px /&gt; &lt;img src=imgs/p1_8.png width=350px /&gt;
 
-This demonstrates that the CNN learned to detect useful road features on its own, i. e., with only the human steering angle as training signal. We never explicitly trained it to detect the outlines of roads, for example.
+This demonstrates that the **CNN learned to detect useful road features on its own**, i. e., with only the human steering angle as training signal. We never explicitly trained it to detect the outlines of roads, for example.
 
 
 ---
 ### 2.2.8 Conclusions
 
-- We have empirically demonstrated that CNNs are able to learn the entire task of lane and road following without manual decomposition into 
+- We have empirically demonstrated that **CNNs are able to learn the entire task of lane and road following** without manual decomposition into 
  - road or lane marking detection, 
  - semantic abstraction, 
  - path planning, 
@@ -854,7 +860,7 @@ Figure 8 shows plots of PilotNet steering output as a function of pixel shift in
 - NetHVF input image has approximately two times higher vertical field of view, but then is scaled down by that factor. 
 - The networks are trained with stochastic gradient descent (SGD) and the mean squared error (MSE) cost function for 32 epochs.
 
-.center[&lt;img src=imgs/p2_t1.png height=350px/&gt;]
+.center[&lt;img src=imgs/p2_t1.png height=300px/&gt;]
 
 
 - Each layer except for the last fully-connected layer is followed by a RELU.
@@ -1346,8 +1352,12 @@ Epoch 20/20
 ---
 <video width="560" height="420" controls>
     <source src="videos/modified_nvidia_model.mp4" type="video/mp4">
-</video>
 
+
+---
+class: center, middle, title
+
+## </video>
 
 ---
 class: center, middle, title
@@ -1370,12 +1380,9 @@ cropped_image = layer_output([image[None,...]])[0][0]
 ```
 
 ---
-class: center, middle, title
+### Using Saved Model
+h5 model
 
-## Using Saved Model
-
----
-### h5 model
 ```python
 import h5py
 from keras.models import load_model
@@ -1430,7 +1437,14 @@ def telemetry(sid, data):
 ```
 
 ---
-### DroNet: Learning to Fly by Driving
+class: center, middle, main-title
+
+# 4. Advanced Work
+https://zhuanlan.zhihu.com/p/59197798?utm_source=wechat_session&amp;utm_medium=social&amp;utm_oi=615350629938368512
+
+
+---
+## 4.1 DroNet: Learning to Fly by Driving
 *Antonio Loquercio∗, Ana I. Maqueda †, Carlos R. del-Blanco †, and Davide Scaramuzza ICRA2018 -RAL*
 
 
@@ -1439,46 +1453,50 @@ def telemetry(sid, data):
 
 
 ---
-#### Abstract
+### Abstract
 **Background**:
 
 
-- Civilian drones are soon expected to be used in a wide variety of tasks, such as aerial surveillance, delivery, or monitoring of existing architectures. Nevertheless, their deployment in urban environments has so far been limited. Indeed, in unstructured and highly dynamic scenarios, drones face numerous challenges to navigate autonomously in a feasible and safe way. 
+- Civilian drones are soon expected to be used in **a wide variety of tasks**, such as aerial surveillance, delivery, or monitoring of existing architectures. 
+- Nevertheless, their deployment in urban environments has so far been limited. **Indeed, in unstructured and highly dynamic scenarios**, drones face numerous challenges to navigate autonomously in a feasible and safe way. 
 
 **Methodology**:
 
 
 - In contrast to traditional **“map-localize-plan”** methods, this paper explores a **data-driven approach** to cope with the above challenges. 
 - To accomplish this, we propose DroNet: a convolutional neural network that can safely drive a drone through the streets of a city. 
-- Designed as a fast 8-layers residual network, DroNet produces two outputs for each single input image: a steering angle to keep the drone navigating while avoiding obstacles, and **a collision probability** to let the UAV recognize dangerous situations and promptly react to them. 
+- Designed as **a fast 8-layers residual network**, DroNet produces **two outputs** for each single input image: a steering angle to keep the drone navigating while avoiding obstacles, and **a collision probability** to let the UAV recognize dangerous situations and promptly react to them. 
 
+
+---
 **Challenge**:
 
 
-- The challenge is however to collect enough data in an unstructured outdoor environment such as a city.
-- Clearly, having an expert pilot providing training trajectories is not an option given the large amount of data required and, above all, the risk that it involves for other vehicles or pedestrians moving in the streets. 
+- The challenge is however to **collect enough data in an unstructured outdoor environment** such as a city.
+- Clearly, having an expert pilot providing training trajectories is not an option given the large amount of data required and, above all, **the risk is that it involves for other vehicles or pedestrians** moving in the streets. 
 
 **Contributions**:
 
 
-- Therefore, we propose to train a UAV from data collected by cars and bicycles, which, already integrated into the urban environment, would not endanger other vehicles and pedestrians. 
-- Although trained on city streets from the viewpoint of urban vehicles, the navigation policy learned by DroNet is highly generalizable. Indeed, it allows a UAV to successfully fly at relative high altitudes and even in indoor environments, such as parking lots and corridors. 
-- To share our findings with the robotics community, we publicly release all our datasets, code, and trained networks.
+- Therefore, we propose to **train a UAV from data collected by cars and bicycles**, which, already integrated into the urban environment, would not endanger other vehicles and pedestrians. 
+- Although trained on city streets from the viewpoint of urban vehicles, the navigation policy learned by DroNet is **highly generalizable.** Indeed, it allows a UAV to successfully fly at relative high altitudes and even in indoor environments, such as parking lots and corridors. 
+- To share our findings with the robotics community, we **publicly** release all our datasets, code, and trained networks.
 
 
 ---
-#### Introduction
+### 4.1.1 Introduction
 **Backgroud:**
 
 
-- Safe and reliable outdoor navigation of autonomous systems, e.g. unmanned aerial vehicles (UAVs), is a challenging open problem in robotics. Being able to successfully navigate while avoiding obstacles is indeed crucial to unlock many robotics applications, e.g. 
- - surveillance, 
- - construction monitoring, 
- - delivery, 
- - and emergency response [1], [2], [3]. 
-- A robotic system facing the above tasks should simultaneously solve many challenges in **perception, control, and localization.** These become particularly difficult when working in urban areas, as the one illustrated in Fig. 1. In those cases, the autonomous agent is not only expected to navigate while avoiding collisions, but also to safely interact with other agents present in the environment, such as pedestrians or cars. 
-&lt;img src=imgs/p3_1.png /&gt;
+- Safe and reliable outdoor navigation of autonomous systems, e.g. unmanned aerial vehicles (UAVs), is a challenging open problem in robotics. Being able to successfully navigate while avoiding obstacles is indeed crucial to **unlock many robotics applications**, e.g. 
+ - surveillance,  construction monitoring, 
+ - delivery, and emergency response [1], [2], [3]. 
+- A robotic system facing the above tasks should simultaneously solve many challenges in **perception, control, and localization.** These become particularly difficult when working in urban areas, as the one illustrated in Fig. 1. In those cases, the autonomous agent is not only expected to navigate while avoiding collisions, but also to **safely interact with other agents** present in the environment, such as pedestrians or cars. 
 
+  &lt;img src=imgs/p3_1.png width=250px/&gt;
+
+
+---
 **Traditional methods**:
 
 
@@ -1487,8 +1505,10 @@ def telemetry(sid, data):
  - (ii) computation of control commands to allow the agent to avoid obstacles while achieving its goal [1], [4]. 
 - **Disadvantages:**
  - Even though advanced SLAM algorithms enable localization under a wide range of conditions [5], visual aliasing(混叠), dynamic scenes, and strong appearance changes can drive the perception system to unrecoverable errors. 
- - Moreover, keeping the perception and control blocks separated not only hinders(阻碍) any possibility of positive feedback between them, but also introduces the challenging problem of inferring control commands from 3D maps.
+ - Moreover, keeping the perception and control blocks **separated** not only hinders(阻碍) any possibility of positive feedback between them, but also introduces the challenging problem of **inferring control commands from 3D maps.**
 
+
+---
 **Deep learning Based methods:**
 
 Recently, new approaches based on deep learning have offered a way to **tightly couple perception and control**, achieving impressive results in a large set of tasks [6], [7], [8]. 
@@ -1499,6 +1519,8 @@ Recently, new approaches based on deep learning have offered a way to **tightly 
  - In contrast, supervised-learning methods offer a more viable way to learn effective flying policies [6], [9], [10], but they still leave the issue of collecting enough expert trajectories to imitate. 
  - Additionally, as pointed out by [10], collision trajectories avoided by expert human pilots are actually necessary to let the robotic platform learn how to behave in dangerous situations.
 
+
+---
 **Contributions of this paper:**
 
 Clearly, a UAV successfully navigating through the streets should be able to follow the roadway as well as promptly react to dangerous situations exactly as any other ground vehicle would do. Therefore, we herein propose to use data collected from ground vehicles which are already integrated in environments as aforementioned. Overall, this work makes the following contributions: 
@@ -1509,13 +1531,15 @@ Clearly, a UAV successfully navigating through the streets should be able to fol
 - Trading off performance for processing time, we show that our design represents a good fit for navigation-related tasks. Indeed, it enables real-time processing of the video stream recorded by a UAV’s camera.
 - Through an extensive evaluation, we show that our system can be applied to new application spaces without any initial knowledge about them. Indeed, with neither a map of the environment nor retraining or fine-tuning, our method generalizes to scenarios completely unseen at training time including indoor corridors, parking lots, and high altitudes. 
 
+
+---
 **Remark:**
 
 Even though our system achieves remarkable results, we do not aim to replace traditional “map-localize-plan” approaches for drone navigation, but rather investigate whether a similar task could be done with a single shallow neural network. Indeed, we believe that learning-based and traditional approaches will one day complement each other.
 
 
 ---
-#### Related Work
+### 4.1.2 Related Work
 **Background:**
 
 
@@ -1571,18 +1595,19 @@ Recently, there has been an increasing research effort in directly learning cont
 
 
 ---
-#### Methodology
-Our learning approach aims at reactively predicting a steering angle and a probability of collision from the drone on-board forward-looking camera. These are later converted into control flying commands which enable a UAV to safely navigate while avoiding obstacles. 
+### 4.1.3 Methodology
 
-Since we aim to reduce the bare image processing time, we advocate a single convolutional neural network (CNN) with a relatively small size. The resulting network, which we call DroNet, is shown in Fig. 2 (a). 
+- Our learning approach aims at reactively predicting a steering angle and a probability of collision from the drone on-board forward-looking camera. 
+- These are later **converted into control flying commands** which enable a UAV to safely navigate while avoiding obstacles. 
+- Since we aim to **reduce the bare image processing time**, we advocate a single convolutional neural network (CNN) with a relatively small size. The resulting network, which we call DroNet, is shown in Fig. 2 (a). 
 
-***IMPORTANT:***
+**Architecture:**
 
 The architecture is partially shared by the two tasks to reduce the network’s complexity and processing time, but is then separated into two branches at the very end.
 
 
 - Steering prediction is a regression problem, **while collision prediction is addressed as a binary classification problem.** 
-- **Due to their different nature and output range**, we propose to separate the network’s last fully-connected layer. 
+- **Due to their different nature and output range**, we propose to separate the network’s last fully-connected layer. (如果只有一层全连接，分开有意义吗？--权重矩阵的两列不耦合啊)
 - During the training procedure, we use only imagery recorded by manned vehicles. Steering angles are learned from images captured from a car, while probability of collision, from a bicycle.
 
 &lt;img src=imgs/p3_2_1.png /&gt;
@@ -1592,9 +1617,9 @@ The architecture is partially shared by the two tasks to reduce the network’s 
 
 1. The part of the network that is shared by the two tasks consists of a **ResNet-8 architecture** followed by a dropout of 0.5 and a ReLU non-linearity. 
 1. After the last ReLU layer, tasks stop sharing parameters, and the architecture splits into two different fully- connected layers. The first one outputs the steering angle, and the second one a collision probability. *Strictly speaking the latter is not a Bayesian probability but an index quantifying the network uncertainty in prediction. Slightly abusing the notation, we still refer to it as “probability”.* 
-1. We use mean-squared error (MSE) and binary cross-entropy (BCE) to train the steering and collision predictions, respectively. 
+1. We use **mean-squared error** (MSE) and **binary cross-entropy** (BCE) to train the steering and collision predictions, respectively. 
 
-***IMPORTANT:***
+**Issue:**
 
 Although the network architecture proves to be appropriate to minimize complexity and processing time, a naive joint optimization poses serious convergence problems **due to the very different gradients’ magnitudes that each loss produces.** 
 
@@ -1604,26 +1629,26 @@ Although the network architecture proves to be appropriate to minimize complexit
 
 *二者共用一个前面的参数网络，因为MSE的loss梯度较大，故导致参数更新较大，这反之影响了分类loss的前向，而分类loss较小的梯度反向时几乎无法影响网络参数更新*
 
-到底是两个loss还是一个loss?--应该是一个loss
-
 **Solution:**
 
 
 - For the aforementioned reasons, imposing no or constant loss weight between the two losses would likely result in sub-optimal performance or require much longer optimization times. This can be seen as a particular form of **curriculum learning** [19]. 
 - In detail, the weight coefficient corresponding to BCE is defined in (1), while the one for MSE is always 1. For our experiments, we set $decay = \frac{1}{10}$ , and $epoch_0 = 10$.
 $$
-L_{tot} = L_{MSE} + max(0, 1-e^{decay(epoch-epoch_0)})L_{BCE}
+L_{tot} = L_{MSE} + max(0, 1-e^{-decay(epoch-epoch_0)})L_{BCE}
 $$
  - Indeed, the gradients from the regression task are initially much larger, since the MSE gradients’ norms is proportional to the absolute steering error. 
  - Therefore, we give more and more weight to the classification loss in later stages of training. 
  - Once losses’ magnitudes are comparable, the optimizer will try to find a good solution for both at the same time. 
-- The Adam optimizer [20] is used with a starting learning rate of 0.001 and an exponential per-step decay equal to 10−5. We also employ **hard negative mining** for the optimization to focus on those samples which are the most difficult to learn. 
-？？？？
-In particular, we select the k samples with the highest loss in each epoch, and compute the total loss according to Eq. (1). We define k so that it decreases over time.
+- The Adam optimizer [20] is used with a starting learning rate of 0.001 and an exponential per-step decay equal to 10−5. We also employ **hard negative mining** for the optimization to focus on those samples which are the most difficult to learn. ????
+In particular, we select the k samples with the highest loss in each epoch, and compute the total loss according to Eq. (1). We define k so that it decreases over time. ????
 
 **The reason of using Resbolck:**
 
-The residual blocks of the ResNet, proposed by He et al. [18], are shown in Fig. 2 (b). Dotted lines represent skip connections defined as 1×1 convolutional shortcuts to allow the input and output of the residual blocks to be added. Even though an advantage of ResNets is to tackle the vanishing/exploding gradient problems in very deep networks, its success lies in its learning principle. Indeed, the residual scheme has been primarily introduced to address the degradation problem generated by difficulties in networks’ optimization [18]. Therefore, since residual architectures are known to help generalization on both shallow and deep networks [18], we adapted this design choice to increase model performance.
+The residual blocks of the ResNet, proposed by He et al. [18], are shown in Fig. 2 (b). Dotted lines represent skip connections defined as 1×1 convolutional shortcuts to allow the input and output of the residual blocks to be added. 
+
+
+- Even though an advantage of ResNets is to tackle the vanishing/exploding gradient problems in very deep networks, its success lies in its learning principle. Indeed, the residual scheme has been primarily introduced to address the degradation problem generated by difficulties in networks’ optimization [18]. Therefore, since residual architectures are known to help generalization on both shallow and deep networks [18], we adapted this design choice to increase model performance.
 
 &lt;img src=imgs/p3_2_2.png /&gt;
 
@@ -1635,54 +1660,162 @@ To learn steering angles from images, we use one of the publicly available datas
 - This dataset contains over `70,000 images` of car driving distributed over 6 experiments, 5 for training and 1 for testing. 
 - Every experiment stores time-stamped images from 3 cameras (left, central, right), IMU, GPS data, gear, brake, throttle, steering angles and speed. 
 
-For our experiment, we only use images from the forward-looking camera (Fig. 3 (a)) and their associated steering angles. 
+For our experiment, we only use images from the **forward-looking camera** (Fig. 3 (a)) and their associated steering angles. 
 
 &lt;img src=imgs/p3_3_1.png /&gt;
 
-To our knowledge, there are no public datasets that associate images with collision probability according to the distance to the obstacles. Therefore, we collect our own collision data by mounting a GoPro camera on the handlebars of a bicycle. We drive along different areas of a city, trying to diversify the types of obstacles (vehicles, pedestrians, vegetation, under- construction sites) and the appearance of the environment (Fig. 3 (b)). This way, the drone is able to generalize under different scenarios. 
+To our knowledge, **there are no public datasets that associate images with collision probability according to the distance to the obstacles.** 
 
 
+- Therefore, we collect our own collision data by mounting a GoPro camera on the handlebars of a bicycle. 
+- We drive along different areas of a city, trying to diversify the types of obstacles (vehicles, pedestrians, vegetation, under- construction sites) and the appearance of the environment (Fig. 3 (b)). 
 - We start recording when we are far away from an obstacle and stop when we are very close to it. In total, we collect around 32,000 images distributed over 137 sequences for a diverse set of obstacles. 
-- We manually annotate the sequences, so that frames far away from collision are labeled as 0 (no collision), and frames very close to the obstacle are labeled as 1 (collision), as can be seen in Fig. 3(b). 
+- We **manually annotate the sequences**, so that frames far away from collision are labeled as 0 (no collision), and frames very close to the obstacle are labeled as 1 (collision), as can be seen in Fig. 3(b). 
 
 &lt;img src=imgs/p3_3_2.png /&gt;
 
-Collision frames are the types of data that cannot be easily obtained by a drone but are necessary to build a safe and robust system.
+**Remark:**
 
-C. Drone Control 
+*Collision frames are the types of data that cannot be easily obtained by a drone but are necessary to build a safe and robust system.*
 
-The outputs of DroNet are used to command the UAV to move on a plane with forward velocity $v_k$ and steering angle $\theta_k$. More specifically, we use the probability of collision $p_t$ provided by the network to modulate the forward velocity: 
+***C. Drone Control*** 
+
+The outputs of DroNet are used to command the UAV to move on a plane with forward velocity $v_k$ and steering angle $\theta_k$. More specifically, we **use the probability of collision $p_t$ provided by the network to modulate the forward velocity:** 
 
 
-- We use a low-pass filtered version of the modulated forward velocity $v_k$ to provide the controller with smooth, continuous inputs $(0 ≤ \alpha ≤ 1)$:
-
+- We use a **low-pass filtered** version of the modulated forward velocity $v_k$ to provide the controller with smooth, continuous inputs $(0 ≤ \alpha ≤ 1)$:
 $$
-  v_k = (1−\alpha)v_{k−1} + \alpha (1− p_t)V_{max}
+v_k = (1−\alpha)v_{k−1} + \alpha (1− p_t)V_{max}
 $$
-
-
-- jfkd
 
 
 - the vehicle is commanded to go at maximal speed Vmax when the probability of collision is null,
 - and to stop whenever it is close to 1.
-- 
 
-Similarly, we map the predicted scaled steering $s_k$ into a rotation around the body z-axis (yaw angle θ), corresponding to the axis orthogonal to the propellers’ plane. Concretely, we convert sk from a [−1,1] range into a desired yaw angle θk in the range [−π
-2 , π
-2 ] and low-pass filter it: θk = (1−β)θk−1 +β
-π 2
-sk (3)
-In all our experiments we set α = 0.7 and β = 0.5, 
 
-while #$Vmax was changed according to the testing environment. The above constants have been selected empirically trading off smoothness for reactiveness of the drone’s flight. As a result, we obtain a reactive navigation policy that can reliably control a drone from a single forward-looking camera. An interesting aspect of our approach is that we can produce a collision probability from a single image without any information about the platform’s speed. Indeed, we conjecture the network to make decision on the base of the distance to observed objects in the field of view. Convolutional networks are in fact well known to be successful on the task of monocular depth estimation [15]. An interesting question that we would like to answer in future work is how this approach compares to an LSTM [22] based solution, making decisions over a temporal horizon.
+- Similarly, we map the predicted scaled steering $s_k$ into a rotation around the body z-axis (yaw angle $\theta$), corresponding to the axis orthogonal to the propellers’ plane. Concretely, we convert $s_{k}$ from a [−1,1] range into a desired yaw angle $\theta_k$ in the range $[-\frac{\pi}{2}, \frac{\pi}{2}]$ and low-pass filter it: 
+$$
+\theta_k = (1-\beta)\theta_{k_1} + \beta \frac{\pi}{2} s_k
+$$
+- In all our experiments we set α = 0.7 and β = 0.5, while Vmax was changed according to the testing environment. 
+ - The above constants have been selected empirically **trading off smoothness for reactiveness** of the drone’s flight. 
+- As a result, we obtain a **reactive navigation policy** that can reliably control a drone from a single forward-looking camera. 
+- An interesting aspect of our approach is that we can produce a collision probability from a single image without any information about the platform’s speed. 
+- Indeed, we conjecture the network to **make decision on the base of the distance to observed objects** in the field of view. 
+- Convolutional networks are in fact well known to be successful on the task of monocular depth estimation [15]. 
+- An interesting question that we would like to answer in future work is how this approach compares to an **LSTM [22] based solution, making decisions over a temporal horizon.**
+
+
+---
+### 4.1.4 Experimental Results
+In this section, we show quantitative and qualitative results of our proposed methodology. 
+
+
+- First, we evaluate the accuracy of DroNet with a set of **performance metrics**. 
+- Then, we discuss its control capabilities comparing it against a set of **navigation baselines**.
+
+**A. Hardware Specification**
+
+
+- We performed our experiments on a Parrot Bebop 2.0 drone. Designed as an outdoor hobby platform, it has a basic and rather inaccurate, visual odometry system that allows the user to provide only high-level commands, such as body-frame velocities, to control the platform. 
+- Velocity commands are produced by our network running on an **Intel Core i7 2.6 GHz CPU** that receives images at 30 Hz from the drone through Wi-Fi.
+
+**B. Regression and Classification Results**
+
+We first evaluate the regression performance of our model employing the testing sequence from the Udacity dataset [21]. 
+
+
+- To quantify the performance on steering prediction, we use two metrics: root-mean-squared error (RMSE) and explained variance ratio (EVA). 
+ - Explained Variance is a metric used to quantify the quality of a regressor, and is defined as
+$$
+EVA = \frac{Var[y_{true}-y_{pred}]}{Var[y_{true}]}
+$$
+- To asses the performance on collision prediction, we use average classification accuracy and the F-1 score.
+ - F-1 score is a metric used to quantify the quality of a classifier. It is defined as
+$$
+F-1 = 2\frac{precision \text{x} recall}{precision+recall}
+$$
+
+Table I compares DroNet against a set of other architectures from the literature [18], [23], [9]. 
+
+
+- Additionally, we use as weak baselines a constant estimator, which always predicts 0 as steering angle and “no collision”, and a random one. 
+- From these results we can observe that our design, even though **80 times smaller than the best architecture (RseNet50)**, maintains a considerable prediction performance while achieving real-time operation (20 frames per second). 
+- Furthermore, the positive comparison against the VGG-16 architecture indicates the advantages in terms of generalization due to the residual learning scheme, as discussed in Section III-A. 
+
+&lt;img src= imgs/p3_t1.png /&gt;
+
+
+- Our design succeeds at finding a good trade-off between performance and processing time as shown in Table I and Fig. 4. Indeed, in order to enable a drone to promptly react to unexpected events or dangerous situations, it is necessary to reduce the network’s latency(延迟) as much as possible.
+
+&lt;img src=imgs/p3_4.png /&gt;
+
+*Fig. 4: Model performance: (a) Probability Density Function (PDF) of actual vs. predicted steerings of the Udacity dataset testing se- quence. (b) Confusion matrix on the collision classification evaluated on testing images of the collected dataset. Numbers in this matrix indicate the percentage of samples falling in each category.*
+
+**C. Quantitative Results on DroNet’s Control Capabilities** 
+
+We tested our DroNet system by autonomously navigating in a number of different urban trails including straight paths and sharp curves. Moreover, to test the generalization capabilities of the learned policy, we also performed experiments in indoor environments. An illustration of the testing environments can be found in Fig. 5 and Fig. 6. 
+
+&lt;img src=imgs/p3_5.png /&gt;
+
+*Fig. 5: Testing environments: (a) Outdoor 1 is a 90◦ curve with a dead end. This scenario is also tested with the drone flying at high altitude (5 m), as shown in Fig. 6. (b) Outdoor 2 is a sharp 160◦ curve followed by a 30 m straight path. A closer view of this environment can be seen in (f). (c) Outdoor 3 is a series of 2 curves, each of approximately 60◦, with straight paths in between. Moreover, we also tested DroNet on scenarios visually different from the training ones, such as (d) an indoor parking lot, and (e) an indoor corridor.*
+
+We compare our approach against two baselines: 
+
+
+- ***Straight line policy:*** trivial baseline consisting in following a straight path in open-loop. This baseline is expected to be very weak, given that we always tested in environments with curves. 
+- ***Minimize probability of collision policy***: strong baseline consisting in going toward the direction minimizing the collision probability. For this approach, we implemented the algorithm proposed in [10], which was shown to have very good control capabilities in indoor environments. We employ the same architecture as in DroNet along with our collected dataset in order to estimate the collision probability. 
+
+As metric we use the average distance travelling before stopping or colliding. Results from Table II indicate that DroNet is able to drive a UAV the longest on almost all the selected testing scenarios. 
+
+&lt;img src=imgs/p3_t2.png /&gt;
+
+
+- Another interesting feature of our method is that DroNet usually drives the vehicle to a **random direction** **in open spaces and at intersections**. 
+- In contrast, the baseline policy of minimizing the probability of collision was very often confused by intersections and open spaces, which resulted in a shaky **uncontrolled behaviour.** 
+- This explains the usually large gaps in performance between our selected methodology and the considered baselines. 
+- Interestingly, the policy learned by DroNet generalizes well to scenarios visually different from the training ones, as shown in Table II. 
+- First, we noticed only a very little drop in performance when the vehicle was flying at relatively high altitude (5 m). Even though the drone’s viewpoint was different from a ground vehicle’s one (usually at 1.5 m), the curve could be successfully completed **as long as the path was in the field of view of the camera**. 
+- More surprisingly was the generalization of our method to indoor environments such as a corridor or a parking lot. In these scenarios, the drone was still able to avoid static obstacles, follow paths, and stop in case of dynamic obstacles occluding its way. 
+- Nonetheless, we experienced some domain-shift problems. In indoor environments, we experienced some drifts at intersections which were sometimes too narrow to be smoothly performed by our algorithm. In contrast, as we expected, the baseline policy of [10], specifically designed to work in narrow indoor spaces, outperformed our method. Still, we believe that it is very surprising that a UAV trained on outdoor streets can actually perform well even in indoor corridors.
+
+The main strengths of the policy learned by DroNet are twofold: 
+
+
+- the platform smoothly follows the road lane while avoiding static obstacles; 
+- the drone is never driven into a collision, **even in presence of dynamic obstacles**, like pedestrians or bicycles, occasionally occluding its path. 
+
+**D. Qualitative Results** 
+
+In Fig. 8 and, more extensively in the supplementary video,
+it is possible to observe the behaviour of DroNet in some of the considered testing environments. Unlike previous work [9], our approach always produced a safe and smooth flight. In particular, the drone always reacted promptly to dangerous situations, e.g. sudden occlusions by bikers or pedestrians in front of it. To better understand our flying policy, we employed the technique outlined in [24]. Fig. 7 shows which part of an image is the most important for DroNet to generate a steering decision. Intuitively, the network mainly concentrates on the “line-like” patterns present in a frame, which roughly indicate the steering direction. Indeed, the strong coupling between perception and control renders perception mainly sensitive to
+
+the features important for control. This explains why DroNet generalizes so well to many different indoor and outdoor scenes that contain “line–like” features. Conversely, we expect our approach to fail in environments missing those kind of features. This was for example the case for an experiment we performed in a forest, where no evident path was visible. However, placed in a forest surrounding with a clearly visible path, the drone behaved better. Furthermore, the importance of our proposed methodology
+is supported by the difficulties encountered while carrying out outdoor city experiments. If we want a drone to learn to fly in a city, it is crucial to take advantage of cars, bicycles or other manned vehicles. As these are already integrated in the urban streets, they allow to collect enough valid training data safely and efficiently.
+V.
+
+V. DISCUSSION Our methodology comes with the advantages and limitations
+inherent to both traditional and learning-based approaches. The advantages are that, using our simple learning and control scheme, we allow a drone to safely explore previously unseen
+scenes while requiring no previous knowledge about them. More specifically, in contrast to traditional approaches, there is no need to be given a map of the environment, or build it online, pre-define collision-free waypoints and localize within this map. An advantage with respect to other CNN- based controllers [13], [9], [12], [6], [11] is, that we can leverage the large body of literature present on steering angle estimation [16], [17] on both the data and the algorithmic point of view. As shown in the experiments, this gives our method high generalization capabilities. Indeed, the flying policy we provide can reliably fly in non-trivial unseen scenarios without requiring any re-training or fine-tuning, as it is generally required by CNN-based approaches [11]. Additionally, the very simple and optimized network architecture can make our approach applicable to resource constrained platforms. The limitations are primarily that the agile dynamics of drones is not fully exploited, and that it is not directly possible to explicitly give the robot a goal to be reached, as it is common in other CNN-based controllers [13], [9], [25]. There are several ways to cope with the aforementioned limitations. To exploit the drone agility, one could generate 3D collision-
+
+free trajectories, as e.g. in [25], when high probability of collision is predicted. To generalize to goal-driven tasks, one could either provide the network with a rough estimate of the distance to the goal [26], or, if a coarse 2D map of the environment is available, exploit recent learning-based approaches developed for ground robots [27]. Moreover, to make our system more robust, one could produce a measure of uncertainty, as in [28]. In such a way, the system could switch to a safety mode whenever needed.
+
+VI. CONCLUSION In this paper, we proposed DroNet: a convolutional neural
+network that can safely drive a drone in the streets of a city. Since collecting data with a UAV in such an uncontrolled environment is a laborious and dangerous task, our model learns to navigate by imitating cars and bicycles, which already follow the traffic rules. Designed to trade off performance for processing time, DroNet simultaneously predicts the collision probability and the desired steering angle, enabling a UAV to promptly react to unforeseen events and obstacles. We showed through extensive evaluations that a drone can learn to fly in cities by imitating manned vehicles. Moreover, we demon- strated interesting generalization abilities in a wide variety of scenarios. Indeed, it could be complementary to traditional “map-localize-plan” approaches in navigation-related tasks, e.g. search and rescue, and aerial delivery. For this reason, we release our code and datasets to share our findings with the robotics community.
+ACKNO
 
 
 ---
 class: center, middle, main-title
 
 # Sonar-Based End to End Learning for a Low-Cost Self-Driving Car
-A Low Cost Road Following Task
+**Contribution:**
+
+
+- A Low Cost Road Following Task
+- there are no public datasets that associate images with collision probability according to the distance to the obstacles.
+- 如何解决交叉路口的问题
+- LSTM [22] based solution, making decisions over a temporal horizon.
 
 将图像和超声波数据作为输入（可以当作一个一维图像显示），记录转向，加减速（超声波数据为0加速，有数据减速）和刹车（数据大刹车）
 
