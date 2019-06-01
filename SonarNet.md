@@ -690,99 +690,66 @@ In this paper, we study and compare each of the common supervised learning algor
 
 #### II. Background and Preliminaries
 
-This section will begin with introducing the main concept implemented in this paper, which is instance selection. After that, some algorithms that are deployed in this research are briefly explained. The K-nearest neighbor classification rule (KNN) is a powerful classification method that allows the classification of an unknown instance using a set of classified training instances. However, the pro- cess of computing distances is computationally high especially in large data sets. More on this algorithm is found later in this section. Set reduction is a prepro- cessing technique that allow lessening the problem of handling large amounts of data. Its main objective is to reduce the original dataset by selecting the most representative data. This way, it is possible to avoid excessive storage of data and excessive running time for supervised classification [6]. Instance selection is the
-3
-process of finding representative patterns from data, which can help reduce the size of the data. This problem is classified as an NP-hard problem, since there is no polynomial algorithm able to find the optimal solution. Existing heuristics can however, give acceptable solutions in reasonable time. One of the techniques that has been used recently in the selection of instances is evolutionary algo- rithms [6]. Evolutionary algorithms (EA) are a family of algorithms belonging to meta-heuristics inspired by the theory of evolution dedicated to solve various problems. These algorithms evolve a set of solutions of a given problem in order to find the best results. Those are stochastic algorithms since they use random processes iteratively. The combination of EAs with local search (LS) was named Memetic Algorithm(MA). Formally, a MA is defined as an EA such as genetic algorithms that includes one or more LS phases within its evolutionary cycle [6].
-In this paper, the work of [6] and its extension in [7] will be used. The
-aim of their work was to present a new supervised memetic instance selection model based on the KNN algorithm for intrusion detection. In the proposed system, they have paired a controlled local search algorithm to an improved ge- netic algorithm. Their Memetic Controlled Local Search algorithm (MCLS) was successfully applied in intrusion detection systems, but in this paper, their algo- rithm will be tested and applied in the robot navigation field to help improve the performance. The algorithms presented next are related to classification meth- ods and include decision trees, Neural Networks, Naive bayes, JRipper, Support Vector Machines and k-Nearest Neighbors.
-2.1 Decision trees induction C4.5
-This is one of the most important supervised learning techniques that is pre- sented in the shape of branches, nodes and leafs and decisions are taken from the root of the tree to the leaf. At the end of each branch is a leaf that presents the result obtained. Intermediate nodes in the tree contains a test on a partic- ular attribute that distribute data in the different sub-trees [8]. Decision trees are widely acceptable because of their flexibility and applicability to wide range of problems. The resulting set of rules or tree paths are mutually exclusive and exhaustive which means that every instance is only covered by a single rule [9].
-2.2 Neural networks
-A Neural Network is a computation model inspired by the structure of neural network in the brain, where it consists of a large number of computing devices /nodes /neurons connected to each other through links to consist a network. Each neuron will receive a weighted sum of the neurons outputs connected to its incoming links [10]. The main features of Neural Networks are their ability to utilize a large amount of sensory information, their capability of collective processing and finally their ability to learn and adapt to changes and new infor- mation.
-4 2.3 Support vector machines
-Support Vector Machines are a set of supervised learning methods that are applied in linear and non-linear classification problems, where they build a model that assigns new examples to one category or the other. They work by mapping the input to vectors into a high dimensional feature space and constructing the optimal separating hyper-plane through structural risk minimization [11]. After that, new examples are mapped to the same space where it is predicted that they belong to the gap they fall on [12]. According to [9] three main benefits are associated with SVMs. First, they are effective in high dimensional space. Second, they are memory efficient as they use a subset of training point in the support vectors or the decision functions. Finally, they are considered versatile since they can hold different kernel functions to be specified as decision functions. On the other hand, SVMs inherently do binary classification that means they only support two-class-problems where real life problems usually have more than two classes. Other procedures can be used to extend them to multiclass problems such as one versus the rest and one versus one approaches [13]. Please note that the Sequential Minimal Optimization (SMO) used in the comparison in this work is one way to solve Support Vector Machines training problems.
-2.4 JRipper
-JRipper is a supervised learning rule based learning algorithm that stands for Repeated Incremental Pruning to Produce Error Reduction. It builds a set of rules that identify the classes keeping in mind minimizing the error. It consists of two stages: the building stage and the optimization stage. Some references such as [14] add a third stage which is the delete stage. Another simple introduction to JRipper is given in [15] where they mention that all examples at start are treated as a class, and rules that cover all members of that class are found. After that, the algorithm moves to the class and does the same until all classes are covered. According to the creator of this algorithm, it was designed to be fast and effective when dealing with large and noisy datasets compared to decision trees [16].
-2.5 Naive bayes
-The Naive Bayes classifier is a classical demonstration of how generative assump- tions and parameter estimations simplify the learning process [10]. It assumes that the explanatory variables are independent conditionally to the target vari- able. This assumption contribute in reducing the training time complexity and helps the algorithm compete on numerous application areas. The performance of this classifier depends on the quality of the estimate of the uni-variate con- ditional distributions and on an efficient selection of the informative explicative variables. This approach as other approaches has some advantages such as its low training and prediction time complexity in addition to its low variance. It shines in classification problems where only few training examples are available.
-5
-This classifier if not used alone, is associated with other learning algorithms such as decision trees [8].
-2.6 K-nearest neighbor
-K-Nearest neighbor (KNN) is one of the most widely and oldest used meth- ods for object classification especially when there is little or no prior knowledge about the distribution of the data as mentioned in [9]. Sometimes it is used as a replacement to support vector machines as it has the ability to handle more than two classes [17]. The nearest neighbor is calculated using a type of distance functions based on the value of k which specifies how many nearest neighbors are to be considered to define the class of a sample data point or a query. As [18] mentions in a comparison table between all nearest neighbors algorithms; KNN has some main advantages such as: a) fast training time, b) easy to learn and high algorithm simplicity, c) robust to noisy training data and finally, d) effective if training data is large. On the other hand, the same comparison table mentions some disadvantages of this algorithm such as slow running and memory limi- tations. To overcome some of the disadvantages related to the KNN algorithm, set reduction was proposed. It is a preprocessing technique that allow reducing the size of the dataset. Its main objective is to reduce the original dataset by selecting the most representative data points. This way, it is possible to avoid excessive storage of data points and excessive running time for supervised classi- fication [18]. In a later section, the method of set reduction applied in this work is presented.
-3 DATASETS AND SYSTEM PROPERTIES
-The authors in [19] prepared their own data by guiding the robot through a certain algorithm. A C++ routine was implemented to guide the behavior of following walls in a known situation. The algorithm basically is responsible for generating the decision the robot should take along its navigation. The infor- mation was collected as their robot SCITOS G5 navigate through the room following the walls during four rounds. The collection of data points was per- formed at a rate of 9 samples / second. Their generated database contain 5456 examples and it has three versions divided in three files. The first file contains sensor information from two sensors as in 2 attributes and one class, the second file contains information from four sensors as in 4 attributes and 1 class and the last file contains sensor information from 24 sensors as in 24 attributes and 1 class. The class contains four robot decisions; move forward, slight right turn, sharp right turn and slight left turn. This dataset is widely used in research that is related to robot navigation, machine learning, and classification algorithms such as [20] and [1]. The same dataset is used in our research for comparison between algorithms and set reduction. It is available in the UCI machine learn- ing repository. The experiments were held on an Intel core i7, 64-bit operating system 2.20 GHz processor and 4GB RAM.
-6 4 ALGORITHM DESCRIPTION
-This section presents a brief description on the technique applied in the paper to reduce the training files. As mentioned earlier, this work is found in [6] and [7]. Their aim was to set up a hybrid system between the genetic algorithm, local search, and they introduced the CNN algorithm to this hybridization, specifi- cally to the genetic algorithm loop. This hybrid system is meant to reduce the size of the training files used in KNN to reduce the running time while maintain- ing the accuracy and the classification performance. To address this issue, they proposed an approach for instance selection using an algorithm that reduces the search space and determines a good subset of search Genes for classification. In fact, the instance ranking information is provided by the KNN classifier. The evaluation function takes into account both the Reduction and the accuracy of the classification calculated using KNN. Figure (1) presents the block diagram that summarizes the algorithm steps [7 ]. The genetic algorithm in loop is de- tailed with all its steps such as evaluation of individuals of initial population, selection, mutation, and crossover.
-CNN
+Instance selection is the process of finding representative patterns from data, which can help reduce the size of the data. This problem is classified as an NP-hard problem, since there is no polynomial algorithm able to find the optimal solution. Existing heuristics can however, give acceptable solutions in reasonable time. 
 
-To improve the results, they implemented a controlled local search algorithm,
-which is the algorithm of the descent, applied it in the genetic loop or at the end of it based on the users choice. Another step was integrated in the loop in order to further improve the results through integrating the solution of CNN (Condensed nearest neighbor) in the initial population pool after applying it to the original data set. Hybridizing the three proposed approaches; namely the genetic algorithm, local search and CNN, enabled them to reach their goal of reducing the classification time of large datasets (more than four hundred thousand instances). This system is here applied in the robot navigation field to test its usability and benefit from its features.
-5 RESULTS
-Table (1) presents the comparison held between the different algorithms intro- duced earlier using the Robot navigation data set. The criterion included in the comparison are the accuracy, the number of correctly classified instances, train- ing time, and testing time. This table presents the results of running the robot navigation datasets in the WEKA software [21] for comparison purposes. The algorithms mentioned earlier were all applied to get the required results. As far as accuracy concerns, decision trees, JRip and KNN were the best algorithms to perform in almost all cases. On the other hand, KNN outperformed them all in terms of training time which is a point counted for this algorithm. However, the same algorithm recorded high testing time as expected after [18] discussed some disadvantages for the KNN algorithm such as slow running and memory limitation. From this result, the idea of applying the set reduction method using MCLS came. The reduced file was again tested in WEKA to obtain the new results.
-Table 1: COMPARISON ANALYSIS
-Data file used Evaluation Criteria
-Decision Trees SMO JRip Neural network Naive Bayes KNN
-Sensor 2 file
-Accuracy(percent)
-Correctly classified(instances) Training time (s) Testing time(s)
-Sensor 4 file Accuracy(percent)
-Correctly classified(instances) Training time(s) Testing time(s)
-Sensor 24 file Accuracy(percent)
-Correctly classified(instances) Training time(s) Testing time(S)
-100
-5456 0.15 0.17
-100
-5456 0.18 0.14
-99.60 5437 0.39 0.03
-77.20 99.90
-4212 5453 0.32 0.25 0.25 0.01
-77.30 99.90 4216 5453 0.59 0.36 0.15 0.02
-71.40 98.80 3897 5392 9.39 2.46 0.09 0.02
-91.83 5010 9.1
-0.02
-97.47 5318 14.8 0.07
-87.92 4797 81.88 0.12
-90.50 98.80 4942 5391
-0.06
-0.01
-0.12
-3.91
-89.10 97.20 4862 5304
-0.02
-0.01
-0.13
-4.05
-52.40 88.17 2862 4811 0.07
-0.01
-0.42
-6.88
-8 Table (2) presents the evolution of the KNN algorithm after applying the
-MCLS technique to reduce training files. Note that the number of instances after reduction in the first file was 417/5456 with reduction rate of 92 percent, in the second file was 476/5456 with a reduction rate of 91 percent and in the third file was 948/5456 with a reduction rate of 84 percent. Some points should be noted regarding the performing of these tests. For the original KNN tests in table 1, all results were obtained using the cross-validation method except for the testing time where it was obtained using testing with the original training file since cross validation yields no testing time. As for the KNN test using the reduced files, the testing was done using the original files as they will contain more information than the current reduced training file and their results will present an indication for the robot performance in real life after facing new situations. Additionally, if we test with the original file, the comparison will be valid as the file size in both situations will be the same. Moving to the results, the reduction in test time can be noticed clearly as the reduction exceeded 97 percent in the first file, 92 percent in the second file and exceeded 76 percent in the third file. The accuracy experienced some drop as well but it was very low between 1 percent and 3 percent in the case of the first two files. On the other hand, it increased in the case of the third file. As for the training time, it was less. The main explanation is related to the reduction in the training files. This reduction led to a simpler file construction, faster training, thus faster testing, learning and performing. This way, the major drawbacks of KNN will be solved while maintaining the great advantages of fast training time and learning.
-Table 2: COMPARISON BETWEEN ORIGINAL KNN AND KNN WITH RE- DUCED FILES
-Data file used Evaluation Criteria
-K-nearest neighbors KNN with reduced data
-Sensor 2 file
-File size(instances)
-Accuracy(percent)
-Correctly classified(instances) Training time (s) Testing time(s)
-Sensor 4 file
-File size(instances) Accuracy(percent)
-Correctly classified(instances) Training time(s) Testing time(s)
-Sensor 24 file
-File size(instances) Accuracy(percent)
-Correctly classified(instances) Training time(s) Testing time(s)
-5456
-98.80 5391 0.01 3.91
-5456 97.20 5304 0.01 4.05
-5456 88.17 4811 0.01 6.88
-417
-97.19 5303 0
-0.1 476
-94.11 5135 0
-0.31 948
-90.24 4924 0
-1.63
-6 CONCLUSION 9
-The K-nearest neighbor algorithm is a supervised learning algorithm that is used widely in the classification problems. In this paper, the focus was on the robot navigation field where special robot navigation datasets were used to test multiple classification algorithms using WEKA. The results showed some lim- itations in terms of testing or running time in the KNN algorithm. Instance selection using a hybrid algorithm was applied to reduce the training files and the KNN algorithm was tested again to notice important improvements in the testing time and the accuracy in one case. It is concluded that KNN is an old yet still a promising algorithm as the major drawbacks of KNN will be solved while maintaining the great advantages of fast training time and learning.
-References
-1.
+One of the techniques that has been used recently in the selection of instances is evolutionary algorithms [6]. Evolutionary algorithms (EA) are a family of algorithms belonging to meta-heuristics inspired by the theory of evolution dedicated to solve various problems. These algorithms evolve a set of solutions of a given problem in order to find the best results. Those are stochastic algorithms since they use random processes iteratively. The combination of EAs with local search (LS) was named Memetic Algorithm(MA). Formally, a MA is defined as an EA such as genetic algorithms that includes one or more LS phases within its evolutionary cycle [6].
+
+In this paper, the work of [6] and its extension in [7] will be used. The aim of their work was to present a new supervised memetic instance selection model based on the KNN algorithm for intrusion detection. In the proposed system, they have paired a controlled local search algorithm to an improved genetic algorithm. Their Memetic Controlled Local Search algorithm (MCLS) was successfully applied in intrusion detection systems, but in this paper, their algo- rithm will be tested and applied in the robot navigation field to help improve the performance. The algorithms presented next are related to classification methods and include decision trees, Neural Networks, Naive bayes, JRipper, Support Vector Machines and k-Nearest Neighbors.
+
+**Decision trees induction C4.5:**
+
+This is one of the most important supervised learning techniques that is presented in the shape of branches, nodes and leafs and decisions are taken from the root of the tree to the leaf. At the end of each branch is a leaf that presents the result obtained. Intermediate nodes in the tree contains a test on a particular attribute that distribute data in the different sub-trees [8]. Decision trees are widely acceptable because of their flexibility and applicability to wide range of problems. The resulting set of rules or tree paths are mutually exclusive and exhaustive which means that every instance is only covered by a single rule [9].
+
+**Neural networks:**
+A Neural Network is a computation model inspired by the structure of neural network in the brain, where it consists of a large number of computing devices /nodes /neurons connected to each other through links to consist a network. Each neuron will receive a weighted sum of the neurons outputs connected to its incoming links [10]. The main features of Neural Networks are their ability to utilize a large amount of sensory information, their capability of collective processing and finally their ability to learn and adapt to changes and new information.
+
+**Support vector machines:**
+Support Vector Machines are a set of supervised learning methods that are applied in linear and non-linear classification problems, where they build a model that assigns new examples to one category or the other. 
+
+They work by mapping the input to vectors into a high dimensional feature space and constructing the optimal separating hyper-plane through structural risk minimization [11]. After that, new examples are mapped to the same space where it is predicted that they belong to the gap they fall on [12]. 
+
+According to [9] three main benefits are associated with SVMs. 
+
+- First, they are effective in high dimensional space. 
+- Second, they are memory efficient as they use a subset of training point in the support vectors or the decision functions. 
+- Finally, they are considered versatile since they can hold different kernel functions to be specified as decision functions. 
+
+On the other hand, SVMs inherently do binary classification that means they only support two-class-problems where real life problems usually have more than two classes. Other procedures can be used to extend them to multi-class problems such as one versus the rest and one versus one approaches [13]. Please note that the Sequential Minimal Optimization (SMO) used in the comparison in this work is one way to solve Support Vector Machines training problems.
+
+**JRipper:**
+JRipper is a supervised learning rule based learning algorithm that stands for Repeated Incremental Pruning to Produce Error Reduction. It builds a set of rules that identify the classes keeping in mind minimizing the error. It consists of two stages: the building stage and the optimization stage. Some references such as [14] add a third stage which is the delete stage. Another simple introduction to JRipper is given in [15] where they mention that all examples at start are treated as a class, and rules that cover all members of that class are found. After that, the algorithm moves to the class and does the same until all classes are covered. According to the creator of this algorithm, it was designed to be fast and effective when dealing with large and noisy datasets compared to decision trees [16].
+
+**Naive bayes:**
+The Naive Bayes classifier is a classical demonstration of how generative assumptions and parameter estimations simplify the learning process [10]. It assumes that the explanatory variables are independent conditionally to the target variable. This assumption contribute in reducing the training time complexity and helps the algorithm compete on numerous application areas. The performance of this classifier depends on the quality of the estimate of the univariate conditional distributions and on an efficient selection of the informative explicative variables. This approach as other approaches has some advantages such as its low training and prediction time complexity in addition to its low variance. It shines in classification problems where only few training examples are available. This classifier if not used alone, is associated with other learning algorithms such as decision trees [8].
+
+**K-nearest neighbor:**
+K-Nearest neighbor (KNN) is one of the most widely and oldest used methods for object classification especially when there is little or no prior knowledge about the distribution of the data as mentioned in [9]. Sometimes it is used as a replacement to support vector machines as it has the ability to handle more than two classes [17]. The nearest neighbor is calculated using a type of distance functions based on the value of k which specifies how many nearest neighbors are to be considered to define the class of a sample data point or a query. 
+
+As [18] mentions in a comparison table between all nearest neighbors algorithms; KNN has some main advantages such as: 
+
+- a) fast training time, 
+
+- b) easy to learn and high algorithm simplicity, 
+
+- c) robust to noisy training data and finally, 
+
+- d) effective if training data is large. 
+
+On the other hand, the same comparison table mentions some disadvantages of this algorithm such as slow running and memory limitations. To overcome some of the disadvantages related to the KNN algorithm, **set reduction was proposed.** It is a preprocessing technique that allow reducing the size of the dataset. Its main objective is to reduce the original dataset by selecting the most representative data points. This way, it is possible to avoid excessive storage of data points and excessive running time for supervised classification [18]. In a later section, the method of set reduction applied in this work is presented.
+
+#### III. Datasets
+
+It is available in the UCI machine learning repository. 
+
+#### IV. Algorithm Description
+
+This section presents a brief description on the technique applied in the paper to reduce the training files. As mentioned earlier, this work is found in [6] and [7]. Their aim was to set up a hybrid system between the genetic algorithm, local search, and they introduced the CNN algorithm to this hybridization, specifically to the genetic algorithm loop. This hybrid system is meant to reduce the size of the training files used in KNN to reduce the running time while maintaining the accuracy and the classification performance. 
+
+
+#### V. Results
+
+<img src=sonar_imgs/p10_t1.png />
+
+
+
+<img src=sonar_imgs/p10_t2.png />
