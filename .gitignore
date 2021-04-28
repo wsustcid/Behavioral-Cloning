@@ -1,0 +1,5 @@
+dataset
+doc/beta_simulator_linux
+doc/*.zip
+doc/videos
+weights
